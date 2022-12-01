@@ -16,17 +16,44 @@ namespace _3B2Cislica27 {
 
             List<int> elfCalories = new List<int>();
 
+            int i = 0;
+
+            int tempCalories = 0;
+
             foreach (string line in readText) {
 
                 if (line == " " || line == "") {
 
-                    Console.WriteLine("(" + line + ")");
+                    elfCalories.Add(tempCalories);
+
+                    Console.WriteLine("Elf " + i + " has " + tempCalories + " calories.");
+
+                    tempCalories = 0;
+
+                    i++;
+                    
+                    continue;
                     
                 }
 
-                Console.WriteLine(line);
+                tempCalories += int.Parse(line);
 
             }
+
+            elfCalories.Sort();
+            elfCalories.Reverse();
+
+            int maxCalories1 = elfCalories[0];
+            int maxCalories2 = elfCalories[1];
+            int maxCalories3 = elfCalories[2];
+
+            Console.WriteLine("\nMax calories #1: " + maxCalories1);
+            Console.WriteLine("Max calories #2: " + maxCalories2);
+            Console.WriteLine("Max calories #3: " + maxCalories3);
+
+            int totalTop3 = maxCalories1 + maxCalories2 + maxCalories3;
+
+            Console.WriteLine("\nTotal calories of top 3: " + totalTop3);
 
         }
 
