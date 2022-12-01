@@ -2,4 +2,4 @@
 
 ### My solutions to the [Advent of Code](https://adventofcode.com) problems.
 
-![Advent of Code Image](AdventOfCode.png)
+![Advent of Code Image](adventofcode.png)
