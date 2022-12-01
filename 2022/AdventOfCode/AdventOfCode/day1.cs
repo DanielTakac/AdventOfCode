@@ -18,13 +18,13 @@ namespace _3B2Cislica27 {
 
             foreach (string line in readText) {
 
-                if (line != " " || line != "") {
+                if (line == " " || line == "") {
 
                     Console.WriteLine("(" + line + ")");
                     
                 }
 
-                Console.WriteLine("space");
+                Console.WriteLine(line);
 
             }
 
