@@ -10,7 +10,17 @@ namespace day2 {
 
         static void Main(string[] args) {
 
-            
+            string path = @"input.txt";
+
+            string[] readText = File.ReadAllLines(path);
+
+            int score = 0;
+
+            foreach (string line in readText) {
+
+                Console.WriteLine(line.Substring(0, 1) + "-" + line.Substring(2, 1));
+                
+            }
 
         }
 
