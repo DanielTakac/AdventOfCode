@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _2022 {
+namespace day1 {
 
     class Day1 {
-
+        
         static void Main(string[] args) {
 
             string path = @"input.txt";
