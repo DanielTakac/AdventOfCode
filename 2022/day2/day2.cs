@@ -18,8 +18,13 @@ namespace day2 {
 
             foreach (string line in readText) {
 
-                Console.WriteLine(line.Substring(0, 1) + "-" + line.Substring(2, 1));
-                
+                Console.WriteLine(line.Substring(0, 1) + " - " + line.Substring(2, 1));
+
+                char opponentPlay = line.Substring(0, 1)[0];
+                char myPlay = line.Substring(2, 1)[0];
+
+                if ()
+
             }
 
         }
