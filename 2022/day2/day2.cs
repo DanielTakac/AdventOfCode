@@ -14,7 +14,10 @@ namespace day2 {
 
             string[] readText = File.ReadAllLines(path);
 
-            int score = 0;
+            int score1 = 0;
+            int score2 = 0;
+
+            char myPlay2 = ' ';
 
             foreach (string line in readText) {
 
@@ -26,32 +29,77 @@ namespace day2 {
                 // A - Rock B - Paper C - Scissors
                 // X - Rock Y- Paper Z - Scissors
 
+                // Part 1
+
                 switch (myPlay) {
 
-                    case 'X': score += 1; break;
-                    case 'Y': score += 2; break;
-                    case 'Z': score += 3; break;
+                    case 'X': score1 += 1; break;
+                    case 'Y': score1 += 2; break;
+                    case 'Z': score1 += 3; break;
 
                 }
 
                 if ((myPlay == 'X' && opponentPlay == 'A') || (myPlay == 'Y' && opponentPlay == 'B') || (myPlay == 'Z' && opponentPlay == 'C')) {
 
-                    score += 3;
+                    score1 += 3;
 
                 } else if ((myPlay == 'X' && opponentPlay == 'C') || (myPlay == 'Y' && opponentPlay == 'A') || (myPlay == 'Z' && opponentPlay == 'B')) {
 
-                    score += 6;
+                    score1 += 6;
 
-                } else if ((myPlay == 'X' && opponentPlay == 'B') || (myPlay == 'Y' && opponentPlay == 'C') || (myPlay == 'Z' && opponentPlay == 'A')) {
+                }
 
-                    score += 0;
+                // Part 2
 
+                switch (myPlay) {
+
+                    case 'X':
+
+                        switch (opponentPlay) {
+
+                            case 'A': score2 += 3; break;
+                            case 'B': score2 += 1; break;
+                            case 'C': score2 += 2; break;
+
+                        }
+
+                        break;
+
+                    case 'Y':
+
+                        score2 += 3;
+
+                        switch (opponentPlay) {
+
+                            case 'A': score2 += 1; break;
+                            case 'B': score2 += 2; break;
+                            case 'C': score2 += 3; break;
+
+                        }
+
+                        break;
+
+                    case 'Z':
+
+                        score2 += 6;
+
+                        switch (opponentPlay) {
+
+                            case 'A': score2 += 2; break;
+                            case 'B': score2 += 3; break;
+                            case 'C': score2 += 1; break;
+
+                        }
+
+                        break;
+                
                 }
 
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\nFinal score: {score}");
+            Console.WriteLine($"\nPart 1 score: {score1}");
+            Console.WriteLine($"Part 2 score: {score2}");
             Console.ResetColor();
 
         }
