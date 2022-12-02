@@ -52,7 +52,7 @@ namespace day1 {
             Console.WriteLine("Max calories #3: " + maxCalories3);
 
             int totalTop3 = maxCalories1 + maxCalories2 + maxCalories3;
-
+            
             Console.WriteLine("\nTotal calories of top 3: " + totalTop3);
 
         }
