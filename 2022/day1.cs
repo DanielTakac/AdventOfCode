@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _3B2Cislica27 {
+namespace _2022 {
 
-    class Program {
+    class Day1 {
 
         static void Main(string[] args) {
 
