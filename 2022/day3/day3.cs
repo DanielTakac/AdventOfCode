@@ -14,8 +14,6 @@ namespace day1 {
 
             string[] readText = File.ReadAllLines(path);
 
-            List<char> firstCompartment = new List<char>();
-            List<char> secondCompartment = new List<char>();
             List<char> commonItems = new List<char>();
 
             Dictionary<char, int> priorityPerItem = new Dictionary<char, int>();
@@ -36,8 +34,8 @@ namespace day1 {
 
             foreach (string line in readText) {
 
-                firstCompartment = new List<char>();
-                secondCompartment = new List<char>();
+                List<char> firstCompartment = new List<char>();
+                List<char> secondCompartment = new List<char>();
 
                 for (int i = 0; i < line.Count(); i++) {
 
