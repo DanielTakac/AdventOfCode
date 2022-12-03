@@ -55,6 +55,8 @@ namespace day1 {
             
             Console.WriteLine("\nTotal calories of top 3: " + totalTop3);
 
+            Console.ReadKey();
+
         }
 
     }

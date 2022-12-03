@@ -10,7 +10,7 @@ namespace day1 {
 
         static void Main(string[] args) {
 
-            
+            Console.ReadKey();
 
         }
 

@@ -102,6 +102,8 @@ namespace day2 {
             Console.WriteLine($"Part 2 score: {score2}");
             Console.ResetColor();
 
+            Console.ReadKey();
+
         }
 
     }
