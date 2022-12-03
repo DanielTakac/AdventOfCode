@@ -20,24 +20,21 @@ namespace day1 {
 
             Dictionary<char, int> priorityPerItem = new Dictionary<char, int>();
 
-            char[] lowerCaseLetters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
-            char[] upperCaseLetters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+            char[] letters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
             int counter = 1;
 
-            foreach (char item in lowerCaseLetters) priorityPerItem.Add(item, counter++);
-
-            counter = 27;
-
-            foreach (char item in upperCaseLetters) priorityPerItem.Add(item, counter++);
+            foreach (char item in letters) priorityPerItem.Add(item, counter++);
 
             int totalPriority = 0;
 
-            int lines = 0;
+            List<char> badges = new List<char>();
+
+            List<string> elfGroup = new List<string>();
+
+            int totalBadgePriority = 0;
 
             foreach (string line in readText) {
-
-                lines++;
 
                 firstCompartment = new List<char>();
                 secondCompartment = new List<char>();
@@ -78,36 +75,34 @@ namespace day1 {
 
                 FindCommonItem();
 
-                Console.WriteLine("\n\nFirst compartment: " + firstCompartment.Count());
-                Console.WriteLine("Second compartment: " + secondCompartment.Count());
+                // Part 2
 
-                Console.WriteLine("First compartment: ");
+                elfGroup.Add(line);
 
-                for (int i = 0; i < firstCompartment.Count; i++)
-                    Console.Write(firstCompartment[i] + " - ");
+                if (elfGroup.Count() == 3) {
 
-                Console.WriteLine("\nSecond compartment: ");
+                    foreach (char letter in letters) {
 
-                for (int i = 0; i < secondCompartment.Count; i++)
-                    Console.Write(secondCompartment[i] + " - ");
+                        if (elfGroup[0].Contains(letter) && elfGroup[1].Contains(letter) && elfGroup[2].Contains(letter)) {
+
+                            badges.Add(letter);
+
+                        }
+
+                    }
+
+                    elfGroup.Clear();
+
+                }
 
             }
 
-            foreach (char item in commonItems) {
-
-                totalPriority += priorityPerItem[item];
-
-            }
-
-            Console.WriteLine("\nCommon items: ");
-
-            for (int i = 0; i < commonItems.Count; i++)
-                Console.WriteLine(commonItems[i]);
-
-            Console.WriteLine($"\n\nLines: {lines}\nCommon Items: {commonItems.Count()}");
+            foreach (char item in commonItems) totalPriority += priorityPerItem[item];
+            foreach (char item in badges) totalBadgePriority += priorityPerItem[item];
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n\nTotal priority: {totalPriority}");
+            Console.WriteLine($"Part 1: {totalPriority}");
+            Console.WriteLine($"Part 2: {totalBadgePriority}");
             Console.ResetColor();
 
             Console.ReadKey();
