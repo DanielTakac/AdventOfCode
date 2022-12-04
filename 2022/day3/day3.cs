@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace day1 {
+namespace day3 {
 
-    class Day1 {
+    class Day3 {
 
         static void Main(string[] args) {
 
             string path = @"input.txt";
 
-            string[] readText = File.ReadAllLines(path);
+            string[] input = File.ReadAllLines(path);
 
             List<char> commonItems = new List<char>();
 
@@ -32,7 +32,7 @@ namespace day1 {
 
             int totalBadgePriority = 0;
 
-            foreach (string line in readText) {
+            foreach (string line in input) {
 
                 List<char> firstCompartment = new List<char>();
                 List<char> secondCompartment = new List<char>();

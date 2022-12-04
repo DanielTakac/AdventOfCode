@@ -12,14 +12,12 @@ namespace day2 {
 
             string path = @"input.txt";
 
-            string[] readText = File.ReadAllLines(path);
+            string[] input = File.ReadAllLines(path);
 
             int score1 = 0;
             int score2 = 0;
 
-            char myPlay2 = ' ';
-
-            foreach (string line in readText) {
+            foreach (string line in input) {
 
                 Console.WriteLine(line.Substring(0, 1) + " - " + line.Substring(2, 1));
 

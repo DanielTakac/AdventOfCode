@@ -12,7 +12,7 @@ namespace day1 {
 
             string path = @"input.txt";
             
-            string[] readText = File.ReadAllLines(path);
+            string[] input = File.ReadAllLines(path);
 
             List<int> elfCalories = new List<int>();
 
@@ -20,7 +20,7 @@ namespace day1 {
 
             int tempCalories = 0;
 
-            foreach (string line in readText) {
+            foreach (string line in input) {
 
                 if (line == " " || line == "") {
 
