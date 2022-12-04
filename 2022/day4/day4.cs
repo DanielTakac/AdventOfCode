@@ -15,6 +15,7 @@ namespace day4 {
             string[] input = File.ReadAllLines(path);
 
             int part1 = 0;
+            int part2 = 0;
 
             foreach (string line in input) {
 
@@ -26,23 +27,25 @@ namespace day4 {
                 (firstElfSections[0], firstElfSections[1]) = (int.Parse(splitLine[0].Split('-')[0]), int.Parse(splitLine[0].Split('-')[1]));
                 (secondElfSections[0], secondElfSections[1]) = (int.Parse(splitLine[1].Split('-')[0]), int.Parse(splitLine[1].Split('-')[1]));
 
-                Console.ResetColor();
-
                 if ((firstElfSections[0] <= secondElfSections[0] && firstElfSections[1] >= secondElfSections[1]) ||
                     (firstElfSections[0] >= secondElfSections[0] && firstElfSections[1] <= secondElfSections[1])) {
-
-                    Console.ForegroundColor = ConsoleColor.Magenta;
 
                     part1++;
 
                 }
 
-                Console.WriteLine($"\nFirst Elf: {firstElfSections[0]}-{firstElfSections[1]}\nSecond Elf: {secondElfSections[0]}-{secondElfSections[1]}\n");
+                if ((firstElfSections[1] >= secondElfSections[0] && firstElfSections[0] <= secondElfSections[1]) ||
+                    (firstElfSections[0] >= secondElfSections[1] && firstElfSections[1] <= secondElfSections[1])) {
+
+                    part2++;
+
+                }
 
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"\nPart 1: {part1}");
+            Console.WriteLine($"Part 2: {part2}");
             Console.ResetColor();
 
             Console.ReadKey();
