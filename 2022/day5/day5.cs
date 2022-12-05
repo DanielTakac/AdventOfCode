@@ -21,6 +21,9 @@ namespace day5 {
 
             bool reversed = false;
 
+            Console.Write("Part 1 or 2?\n>>");
+            int chosenPart = Convert.ToInt32(Console.ReadLine());
+
             foreach (string line in input) {
 
                 void InsertStacksFromInput() {
@@ -119,43 +122,41 @@ namespace day5 {
 
                 }
 
-                Console.WriteLine($"quantity: {coolArray[0]} from: {coolArray[1]} to: {coolArray[2]}");
+                if (chosenPart != 1 && chosenPart != 2) return;
 
-                for (int i = 0; i < coolArray[0]; i++) {
+                if (chosenPart == 1) {
 
-                    Console.WriteLine($"Moving {stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]} from {coolArray[1]} to {coolArray[2]}");
+                    for (int i = 0; i < coolArray[0]; i++) {
 
-                    List<char> temp1 = stacks[coolArray[2] - 1];
-                    var temp2 = stacks[coolArray[1] - 1];
-                    var temp3 = stacks[coolArray[1] - 1].Count() - 1;
+                        stacks[coolArray[2] - 1].Add(stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]);
 
-                    stacks[coolArray[2] - 1].Add(stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]);
+                        stacks[coolArray[1] - 1].RemoveAt(stacks[coolArray[1] - 1].Count() - 1);
 
-                    stacks[coolArray[1] - 1].RemoveAt(stacks[coolArray[1] - 1].Count() - 1);
+                    }
 
-                }
-
-                /* Part 2
-
-                for (int i = 0; i < coolArray[0]; i++) {
-
-                    //Console.WriteLine($"Moving {stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]} from {coolArray[1]} to {coolArray[2]}");
-
-                    List<char> temp1 = stacks[coolArray[2] - 1];
-                    var temp2 = stacks[coolArray[1] - 1];
-                    var temp3 = stacks[coolArray[1] - 1].Count() - 1;
+                } else {
 
                     List<char> tempList = new List<char>();
 
-                    tempList.Add(temp2[temp3]);
+                    for (int i = 0; i < coolArray[0]; i++) {
 
-                    stacks[coolArray[1] - 1].RemoveAt(stacks[coolArray[1] - 1].Count() - 1);
+                        tempList.Add(stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]);
+
+                        stacks[coolArray[1] - 1].RemoveAt(stacks[coolArray[1] - 1].Count() - 1);
+
+                    }
 
                     tempList.Reverse();
 
-                    stacks[coolArray[2] - 1].Concat(tempList);
+                    foreach (char character in tempList) {
 
-                }*/
+                        stacks[coolArray[2] - 1].Add(character);
+
+                        Console.WriteLine(character);
+
+                    }
+
+                }
 
             }
 
@@ -184,7 +185,7 @@ namespace day5 {
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n\nPart 1: {part1}");
+            Console.WriteLine($"\n\nPart {chosenPart}: {part1}");
             Console.ResetColor();
 
             Console.ReadKey();
