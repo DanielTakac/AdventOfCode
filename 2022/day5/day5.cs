@@ -18,11 +18,32 @@ namespace day5 {
 
             for (int i = 1; i < 10; i++) stacks.Add(new List<char>());
 
+            bool reversed = false;
+
             foreach (string line in input) {
 
                 void InsertStacksFromInput() {
 
-                    if (line.Contains("move")) return;
+                    // If the current line contains "move",
+                    // all the stacks have already been inserted so it skips it
+                    if (line.Contains("move")) {
+
+                        // Only reverses the stacks once
+                        if (!reversed) {
+
+                            for (int i = 0; i < stacks.Count(); i++) {
+
+                                stacks[i].Reverse();
+
+                                reversed = true;
+
+                            }
+
+                        }
+
+                        return;
+
+                    }
 
                     int stackNumber = -1;
 
@@ -43,8 +64,14 @@ namespace day5 {
 
                             stackNumber++;
 
-                        } else if (line[i] == ' ' || line[i] == ']' || char.IsDigit(line[i])) {
-                            
+                        } else if (char.IsDigit(line[i])) {
+
+                            Console.WriteLine("Finished inserting stacks!");
+
+                            return;
+
+                        } else if (line[i] == ' ' || line[i] == ']') {
+
                             Console.WriteLine(line[i] + ": skipping");
 
                             continue;
