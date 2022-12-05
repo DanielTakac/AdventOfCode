@@ -96,10 +96,8 @@ namespace AdventOfCode {
             foreach (char item in commonItems) totalPriority += priorityPerItem[item];
             foreach (char item in badges) totalBadgePriority += priorityPerItem[item];
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Part 1: {totalPriority}");
-            Console.WriteLine($"Part 2: {totalBadgePriority}");
-            Console.ResetColor();
+            AdventOfCode.PrintWithColor($"Part 1: {totalPriority}");
+            AdventOfCode.PrintWithColor($"Part 2: {totalBadgePriority}");
 
             Console.ReadKey();
 

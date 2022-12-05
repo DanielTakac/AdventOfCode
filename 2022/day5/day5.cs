@@ -183,9 +183,7 @@ namespace AdventOfCode {
 
             }
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n\nPart {chosenPart}: {part1}");
-            Console.ResetColor();
+            AdventOfCode.PrintWithColor($"\n\nPart {chosenPart}: {part1}");
 
             Console.ReadKey();
 

@@ -41,17 +41,14 @@ namespace AdventOfCode {
             elfCalories.Sort();
             elfCalories.Reverse();
 
-            int maxCalories1 = elfCalories[0];
-            int maxCalories2 = elfCalories[1];
-            int maxCalories3 = elfCalories[2];
+            Console.WriteLine("\nMax calories #1: " + elfCalories[0]);
+            Console.WriteLine("Max calories #2: " + elfCalories[1]);
+            Console.WriteLine("Max calories #3: " + elfCalories[2]);
 
-            Console.WriteLine("\nMax calories #1: " + maxCalories1);
-            Console.WriteLine("Max calories #2: " + maxCalories2);
-            Console.WriteLine("Max calories #3: " + maxCalories3);
+            int totalTop3 = elfCalories[0] + elfCalories[1] + elfCalories[2];
 
-            int totalTop3 = maxCalories1 + maxCalories2 + maxCalories3;
-            
-            Console.WriteLine("\nTotal calories of top 3: " + totalTop3);
+            AdventOfCode.PrintWithColor($"\nPart 1: {elfCalories[0]}");
+            AdventOfCode.PrintWithColor($"Part 2: {totalTop3}");
 
             Console.ReadKey();
 

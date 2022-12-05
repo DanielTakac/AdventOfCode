@@ -93,10 +93,8 @@ namespace AdventOfCode {
 
             }
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\nPart 1 score: {score1}");
-            Console.WriteLine($"Part 2 score: {score2}");
-            Console.ResetColor();
+            AdventOfCode.PrintWithColor($"\nPart 1 score: {score1}");
+            AdventOfCode.PrintWithColor($"Part 2 score: {score2}");
 
             Console.ReadKey();
 

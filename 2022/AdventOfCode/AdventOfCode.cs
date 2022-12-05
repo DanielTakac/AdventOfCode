@@ -44,6 +44,14 @@ namespace AdventOfCode {
 
         }
 
+        public static void PrintWithColor(string text = "", ConsoleColor color = ConsoleColor.Green) {
+
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ResetColor();
+
+        }
+
     }
 
 }
