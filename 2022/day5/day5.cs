@@ -14,8 +14,10 @@ namespace day5 {
             string[] input = File.ReadAllLines(path);
 
             List<List<char>> stacks = new List<List<char>>();
+            List<List<char>> stacks2 = new List<List<char>>();
 
             for (int i = 1; i < 10; i++) stacks.Add(new List<char>());
+            for (int i = 1; i < 10; i++) stacks2.Add(new List<char>());
 
             bool reversed = false;
 
@@ -121,19 +123,39 @@ namespace day5 {
 
                 for (int i = 0; i < coolArray[0]; i++) {
 
-                    Console.WriteLine($"Moving {stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]} from {coolArray[1] - 1} to {coolArray[2] - 1}");
+                    Console.WriteLine($"Moving {stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]} from {coolArray[1]} to {coolArray[2]}");
 
                     List<char> temp1 = stacks[coolArray[2] - 1];
                     var temp2 = stacks[coolArray[1] - 1];
                     var temp3 = stacks[coolArray[1] - 1].Count() - 1;
-
-                    temp1.Add(temp2[temp3]);
 
                     stacks[coolArray[2] - 1].Add(stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]);
 
                     stacks[coolArray[1] - 1].RemoveAt(stacks[coolArray[1] - 1].Count() - 1);
 
                 }
+
+                /* Part 2
+
+                for (int i = 0; i < coolArray[0]; i++) {
+
+                    //Console.WriteLine($"Moving {stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]} from {coolArray[1]} to {coolArray[2]}");
+
+                    List<char> temp1 = stacks[coolArray[2] - 1];
+                    var temp2 = stacks[coolArray[1] - 1];
+                    var temp3 = stacks[coolArray[1] - 1].Count() - 1;
+
+                    List<char> tempList = new List<char>();
+
+                    tempList.Add(temp2[temp3]);
+
+                    stacks[coolArray[1] - 1].RemoveAt(stacks[coolArray[1] - 1].Count() - 1);
+
+                    tempList.Reverse();
+
+                    stacks[coolArray[2] - 1].Concat(tempList);
+
+                }*/
 
             }
 
@@ -152,6 +174,18 @@ namespace day5 {
                 j++;
 
             }
+
+            string part1 = string.Empty;
+
+            for (int i = 0; i < stacks.Count(); i++) {
+
+                part1 += stacks[i][stacks[i].Count() - 1];
+
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\n\nPart 1: {part1}");
+            Console.ResetColor();
 
             Console.ReadKey();
 
