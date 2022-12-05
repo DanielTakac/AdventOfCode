@@ -26,25 +26,34 @@ namespace day5 {
 
                     int stackNumber = -1;
 
-                    foreach (char character in line) {
+                    for (int i = 0; i < line.Count(); i++) {
 
-                        if (character == ' ' || character == ']' || char.IsDigit(character)) {
+                        // Extremely overcomplicated way of checking if there isn't a crate
+                        if (i - 1 >= 0 && i + 1 < line.Count() && line.Substring(i - 1, 3) == "   ") {
 
-                            Console.WriteLine(character + ": skipping");
-
-                            continue;
-
-                        } else if (character == '[') {
-
-                            Console.WriteLine(character + ": incrementing stack number");
+                            Console.WriteLine(line[i] + ": empty space, incrementing stack number");
 
                             stackNumber++;
 
+                            i += 2;
+
+                        } else if (line[i] == '[') {
+
+                            Console.WriteLine(line[i] + ": incrementing stack number");
+
+                            stackNumber++;
+
+                        } else if (line[i] == ' ' || line[i] == ']' || char.IsDigit(line[i])) {
+                            
+                            Console.WriteLine(line[i] + ": skipping");
+
+                            continue;
+
                         } else {
 
-                            Console.WriteLine(character + ": adding to stack " + stackNumber);
+                            Console.WriteLine(line[i] + ": adding to stack " + (stackNumber + 1));
 
-                            stacks[stackNumber].Prepend(character);
+                            stacks[stackNumber].Add(line[i]);
 
                         }
 
