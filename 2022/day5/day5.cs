@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace day5 {
-
     class Day5 {
 
         static void Main(string[] args) {
@@ -66,7 +65,7 @@ namespace day5 {
 
                         } else if (char.IsDigit(line[i])) {
 
-                            Console.WriteLine("Finished inserting stacks!");
+                            Console.WriteLine("Finished inserting stacks!\n");
 
                             return;
 
@@ -90,7 +89,51 @@ namespace day5 {
 
                 InsertStacksFromInput();
 
-                
+                if (!line.Contains("move")) continue;
+
+                int[] coolArray = new int[3];
+
+                int counter = 0;
+
+                for (int i = 0; i < line.Count(); i++) {
+
+                    if (char.IsDigit(line[i])) {
+
+                        string temp = string.Empty;
+
+                        while (i < line.Count() && char.IsDigit(line[i])) {
+
+                            temp += line[i];
+
+                            i++;
+
+                        }
+
+                        coolArray[counter] = int.Parse(temp);
+
+                        counter++;
+
+                    }
+
+                }
+
+                Console.WriteLine($"quantity: {coolArray[0]} from: {coolArray[1]} to: {coolArray[2]}");
+
+                for (int i = 0; i < coolArray[0]; i++) {
+
+                    Console.WriteLine($"Moving {stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]} from {coolArray[1] - 1} to {coolArray[2] - 1}");
+
+                    List<char> temp1 = stacks[coolArray[2] - 1];
+                    var temp2 = stacks[coolArray[1] - 1];
+                    var temp3 = stacks[coolArray[1] - 1].Count() - 1;
+
+                    temp1.Add(temp2[temp3]);
+
+                    stacks[coolArray[2] - 1].Add(stacks[coolArray[1] - 1][stacks[coolArray[1] - 1].Count() - 1]);
+
+                    stacks[coolArray[1] - 1].RemoveAt(stacks[coolArray[1] - 1].Count() - 1);
+
+                }
 
             }
 
