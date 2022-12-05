@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace day1 {
+namespace AdventOfCode {
 
     class Day1 {
         
         static void Main(string[] args) {
 
-            string path = @"input.txt";
-            
-            string[] input = File.ReadAllLines(path);
+            string[] input = AdventOfCode.GetInput();
 
             List<int> elfCalories = new List<int>();
 

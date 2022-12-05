@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace day5 {
+namespace AdventOfCode {
+
     class Day5 {
 
         static void Main(string[] args) {
 
-            string path = @"input.txt";
-
-            string[] input = File.ReadAllLines(path);
+            string[] input = AdventOfCode.GetInput();
 
             List<List<char>> stacks = new List<List<char>>();
             List<List<char>> stacks2 = new List<List<char>>();

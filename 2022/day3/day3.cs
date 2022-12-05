@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace day3 {
+namespace AdventOfCode {
 
     class Day3 {
 
         static void Main(string[] args) {
 
-            string path = @"input.txt";
-
-            string[] input = File.ReadAllLines(path);
+            string[] input = AdventOfCode.GetInput();
 
             List<char> commonItems = new List<char>();
 

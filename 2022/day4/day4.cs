@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace day4 {
+namespace AdventOfCode {
 
     class Day4 {
 
         static void Main(string[] args) {
 
-            string path = @"input.txt";
-
-            string[] input = File.ReadAllLines(path);
+            string[] input = AdventOfCode.GetInput();
 
             int part1 = 0;
             int part2 = 0;
