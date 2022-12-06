@@ -10,7 +10,7 @@ namespace AdventOfCode {
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput(path: "demo1.txt");
+            string[] input = AdventOfCode.GetInput();
 
             int firstPacketMarker = 0;
             int firstMessageMarker = 0;
