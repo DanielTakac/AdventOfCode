@@ -104,7 +104,7 @@ namespace AdventOfCode {
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput(path: "input.txt");
+            string[] input = AdventOfCode.GetInput();
 
             List<Directory> directories = new List<Directory>();
 
