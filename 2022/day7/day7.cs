@@ -83,15 +83,29 @@ namespace AdventOfCode {
 
                 int size = 0;
 
-                foreach (KeyValuePair<string, int> file in files) {
+                /*foreach (KeyValuePair<string, int> file in files) {
 
                     size += file.Value;
 
-                }
+                }*/
 
                 foreach (Directory dir in containedDirectories) {
 
-                    size += dir.GetTotalSize();
+                    //size += dir.GetTotalSize();
+
+                    if (dir.path.Length < this.path.Length) {
+
+                        //AdventOfCode.PrintWithColor($"{this.path} - {dir.path}", ConsoleColor.Red);
+
+                        return 0;
+
+                    } else {
+
+                        //Console.WriteLine($"{this.path} - {dir.path}");
+
+                    }
+
+                    dir.GetTotalSize();
 
                 }
 
@@ -154,15 +168,32 @@ namespace AdventOfCode {
 
             foreach (string line in input) {
 
+                AdventOfCode.PrintWithColor(line, ConsoleColor.Cyan);
+
                 if (line[0] == '$') {
 
                     if (line.Substring(2, 2) == "cd") {
 
                         if (line.Substring(5, line.Length - 5) == "..") {
 
-                            currentPath.Remove(GetLastSlashPosition() - 1);
+                            AdventOfCode.PrintWithColor($"Before .. - {currentDirectory} - {currentPath}", ConsoleColor.Magenta);
 
-                            currentDirectory = currentPath.Substring(GetLastSlashPosition(), currentPath.Length - GetLastSlashPosition());
+                            AdventOfCode.PrintWithColor(GetLastSlashPosition() + " - " + currentPath.Substring(GetLastSlashPosition()), ConsoleColor.White);
+
+                            if (currentPath.Count(x => x == '/') == 1) {
+
+                                currentPath = "/";
+                                currentDirectory = "/";
+
+                                continue;
+
+                            }
+
+                            currentPath = currentPath.Remove(GetLastSlashPosition());
+
+                            currentDirectory = currentPath.Substring(GetLastSlashPosition() + 1, currentPath.Length - GetLastSlashPosition() - 1);
+
+                            AdventOfCode.PrintWithColor($"After .. - {currentDirectory} - {currentPath}", ConsoleColor.Magenta);
 
                             Console.WriteLine($"Switched to parent folder: {currentPath} - {currentDirectory}");
 
@@ -172,9 +203,29 @@ namespace AdventOfCode {
 
                         currentDirectory = line.Substring(5, line.Length - 5);
 
-                        currentPath += "/" + currentDirectory;
+                        AdventOfCode.PrintWithColor(currentDirectory, ConsoleColor.Yellow);
 
-                        if (DirectoryExists(currentDirectory)) {
+                        AdventOfCode.PrintWithColor(currentDirectory, ConsoleColor.Red);
+
+                        if (currentPath == "/" && currentDirectory == "/") {
+
+                            continue;
+
+                        }
+
+                        if (currentPath == "/") {
+
+                            currentPath += currentDirectory;
+
+                        } else {
+
+                            currentPath += "/" + currentDirectory;
+
+                        }
+
+                        AdventOfCode.PrintWithColor(currentPath);
+
+                        if (!DirectoryExists(currentDirectory)) {
 
                             directories.Add(new Directory(currentDirectory, currentPath));
 
@@ -193,7 +244,18 @@ namespace AdventOfCode {
                     if (line.Substring(0, 3) == "dir") {
 
                         string name = line.Substring(4, line.Length - 4);
-                        string path = $"{currentPath}/{name}";
+
+                        string path = string.Empty;
+
+                        if (currentPath == "/") {
+
+                            path = $"/{name}";
+                        
+                        } else {
+                        
+                            path = $"{currentPath}/{name}";
+                        
+                        }
 
                         if (!DirectoryExists(name)) {
 
@@ -239,11 +301,19 @@ namespace AdventOfCode {
 
             foreach (Directory dir in directories) {
 
-                if (dir.GetTotalSize() <= 100000) {
+                Console.WriteLine($"Get total size of {dir.path}");
 
-                    part1 += dir.GetTotalSize();
+                int size = dir.GetTotalSize();
+
+                break;
+
+                if (size <= 100000) {
+
+                    part1 += size;
 
                 }
+
+                AdventOfCode.PrintWithColor(part1.ToString(), ConsoleColor.Red);
 
             }
 
