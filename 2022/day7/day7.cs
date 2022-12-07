@@ -10,25 +10,26 @@ namespace AdventOfCode {
 
         class Directory {
 
-            string name;
-            string path;
-            int size;
+            public string name;
+            public string path;
+
+            public Dictionary<string, int> files;
 
             List<Directory> containedDirectories;
 
             public Directory() {
-
-                string name = string.Empty;
-                string path = string.Empty;
-                int size = 0;
+                
+                this.name = string.Empty;
+                this.path = string.Empty;
+                this.files = new Dictionary<string, int>();
+                this.containedDirectories = new List<Directory>();
 
             }
 
-            public Directory(string name, string path, int size) : this() {
+            public Directory(string name, string path) : this() {
 
                 this.name = name;
                 this.path = path;
-                this.size = size;
 
             }
 
@@ -40,33 +41,114 @@ namespace AdventOfCode {
 
             }
 
+            public void AddFile(string fileName, int fileSize) {
+
+                if (this.Contains(fileName)) {
+
+                    AdventOfCode.PrintWithColor($"File {fileName} already exists in {this.name}!", ConsoleColor.Red);
+
+                    return;
+
+                }
+
+                files.Add(fileName, fileSize);
+
+            }
+
+            public bool Contains(Directory directory) {
+
+                foreach (Directory dir in containedDirectories) {
+
+                    if (dir.name == directory.name) return true;
+
+                }
+
+                return false;
+
+            }
+
+            public bool Contains(string fileName) {
+
+                foreach (KeyValuePair<string, int> file in files) {
+
+                    if (file.Key == fileName) return true;
+
+                }
+
+                return false;
+
+            }
+
+            public int GetTotalSize() {
+
+                int size = 0;
+
+                foreach (KeyValuePair<string, int> file in files) {
+
+                    size += file.Value;
+
+                }
+
+                foreach (Directory dir in containedDirectories) {
+
+                    size += dir.GetTotalSize();
+
+                }
+
+                return size;
+
+            }
+
         }
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput(path: "demo.txt");
+            string[] input = AdventOfCode.GetInput(path: "input.txt");
 
             List<Directory> directories = new List<Directory>();
 
-            directories.Add(new Directory("/", "/", 0));
+            directories.Add(new Directory("/", "/"));
 
             string currentDirectory = "/";
             string currentPath = "/";
 
             int part1 = 0;
 
-            int GetLastSlashPosition(string text = currentPath) {
+            int GetLastSlashPosition() {
 
                 int lastSlashPosition = 0;
 
-                for (int i = 0; i < text.Length; i++) {
+                for (int i = 0; i < currentPath.Length; i++) {
 
-                    if (text[i] == '/')
-                        lastSlashPosition = i;
+                    if (currentPath[i] == '/') lastSlashPosition = i;
 
                 }
 
                 return lastSlashPosition;
+
+            }
+
+            bool DirectoryExists(string name) {
+
+                foreach (Directory dir in directories) {
+
+                    if (dir.name == name) return true;
+
+                }
+
+                return false;
+
+            }
+
+            Directory GetDirectory(string name) {
+
+                foreach (Directory dir in directories) {
+
+                    if (dir.name == name) return dir;
+
+                }
+
+                return null;
 
             }
 
@@ -90,13 +172,15 @@ namespace AdventOfCode {
 
                         currentDirectory = line.Substring(5, line.Length - 5);
 
-                        if (!directorySizes.ContainsKey(line.Substring(5, line.Length - 5))) {
+                        currentPath += "/" + currentDirectory;
 
-                            directorySizes.Add(line.Substring(5, line.Length - 5), 0);
+                        if (DirectoryExists(currentDirectory)) {
+
+                            directories.Add(new Directory(currentDirectory, currentPath));
 
                         }
 
-                        Console.WriteLine($"Changed directory to {currentDirectory}");
+                        Console.WriteLine($"Changed directory to {currentDirectory}, current path is {currentPath}");
 
                     } else if (line.Substring(2, 2) == "ls") {
 
@@ -108,23 +192,42 @@ namespace AdventOfCode {
 
                     if (line.Substring(0, 3) == "dir") {
 
-                        if (directorySizes.ContainsKey(line.Substring(4, line.Length - 4))) {
+                        string name = line.Substring(4, line.Length - 4);
+                        string path = $"{currentPath}/{name}";
 
-                            continue;
+                        if (!DirectoryExists(name)) {
+
+                            directories.Add(new Directory(name, path));
+
+                            Console.WriteLine($"Found new directory: {name} - {path}");
 
                         }
+                        
+                        Directory currentDir = GetDirectory(currentDirectory);
+                        Directory newDir = GetDirectory(name);
 
-                        directorySizes.Add(line.Substring(4, line.Length - 4), 0);
+                        if (currentDir.Contains(newDir)) continue;
 
-                        Console.WriteLine($"Found new directory: {line.Substring(4, line.Length - 4)}");
+                        currentDir.AddDirectory(newDir);
+
+                        Console.WriteLine($"Adding the found directory to {currentDirectory}");
 
                     } else if (char.IsDigit(line[0])) {
 
                         string[] splitLine = line.Split(' ');
 
-                        directorySizes[currentDirectory] += int.Parse(splitLine[0]);
+                        string fileName = splitLine[1];
+                        int fileSize = int.Parse(splitLine[0]);
 
-                        Console.WriteLine($"File {splitLine[1]} in {currentDirectory} has a size of {splitLine[0]}");
+                        if (!GetDirectory(currentDirectory).Contains(fileName)) {
+
+                            GetDirectory(currentDirectory).AddFile(fileName, fileSize);
+
+                            Console.Write("New ");
+
+                        }
+
+                        Console.WriteLine($"File {fileName} in {currentDirectory} has a size of {fileSize}");
 
                     }
 
@@ -134,13 +237,11 @@ namespace AdventOfCode {
 
             Console.WriteLine();
 
-            foreach (KeyValuePair<string, int> directory in directorySizes) {
+            foreach (Directory dir in directories) {
 
-                Console.WriteLine($"{directory.Key} - {directory.Value}");
+                if (dir.GetTotalSize() <= 100000) {
 
-                if (directory.Value < 100000) {
-
-                    part1 += directory.Value;
+                    part1 += dir.GetTotalSize();
 
                 }
 
