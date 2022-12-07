@@ -11,33 +11,34 @@ namespace AdventOfCode {
         class Directory {
 
             public string name;
-            public string path;
+
+            public Directory parent;
 
             public Dictionary<string, int> files;
 
-            List<Directory> containedDirectories;
+            public List<Directory> containedDirs;
 
             public Directory() {
                 
                 this.name = string.Empty;
-                this.path = string.Empty;
                 this.files = new Dictionary<string, int>();
-                this.containedDirectories = new List<Directory>();
+                this.containedDirs = new List<Directory>();
 
             }
 
-            public Directory(string name, string path) : this() {
+            public Directory(string name) : this() {
 
                 this.name = name;
-                this.path = path;
 
             }
 
-            public void AddDirectory(Directory directory) {
+            public void AddChild(Directory directory) {
 
-                if (containedDirectories.Contains(directory)) return;
+                if (containedDirs.Contains(directory)) return;
 
-                containedDirectories.Add(directory);
+                containedDirs.Add(directory);
+
+                directory.parent = this;
 
             }
 
@@ -57,7 +58,7 @@ namespace AdventOfCode {
 
             public bool Contains(Directory directory) {
 
-                foreach (Directory dir in containedDirectories) {
+                foreach (Directory dir in containedDirs) {
 
                     if (dir.name == directory.name) return true;
 
@@ -83,29 +84,15 @@ namespace AdventOfCode {
 
                 int size = 0;
 
-                /*foreach (KeyValuePair<string, int> file in files) {
+                foreach (KeyValuePair<string, int> file in files) {
 
                     size += file.Value;
 
-                }*/
+                }
 
-                foreach (Directory dir in containedDirectories) {
+                foreach (Directory dir in containedDirs) {
 
-                    //size += dir.GetTotalSize();
-
-                    if (dir.path.Length < this.path.Length) {
-
-                        //AdventOfCode.PrintWithColor($"{this.path} - {dir.path}", ConsoleColor.Red);
-
-                        return 0;
-
-                    } else {
-
-                        //Console.WriteLine($"{this.path} - {dir.path}");
-
-                    }
-
-                    dir.GetTotalSize();
+                    size += dir.GetTotalSize();
 
                 }
 
@@ -121,48 +108,43 @@ namespace AdventOfCode {
 
             List<Directory> directories = new List<Directory>();
 
-            directories.Add(new Directory("/", "/"));
+            Directory currentDir = new Directory("/");
 
-            string currentDirectory = "/";
-            string currentPath = "/";
+            Directory root = currentDir;
+
+            directories.Add(root);
 
             int part1 = 0;
 
-            int GetLastSlashPosition() {
+            void ChangeDirectory(string dir) {
 
-                int lastSlashPosition = 0;
+                if (dir == "..") {
 
-                for (int i = 0; i < currentPath.Length; i++) {
+                    currentDir = currentDir.parent;
 
-                    if (currentPath[i] == '/') lastSlashPosition = i;
-
-                }
-
-                return lastSlashPosition;
-
-            }
-
-            bool DirectoryExists(string name) {
-
-                foreach (Directory dir in directories) {
-
-                    if (dir.name == name) return true;
+                    return;
 
                 }
 
-                return false;
+                if (dir == "/") {
 
-            }
+                    currentDir = root;
 
-            Directory GetDirectory(string name) {
-
-                foreach (Directory dir in directories) {
-
-                    if (dir.name == name) return dir;
+                    return;
 
                 }
 
-                return null;
+                if (!currentDir.Contains(dir)) {
+
+                    var newDir = new Directory(dir);
+
+                    currentDir.AddChild(newDir);
+
+                    directories.Add(newDir);
+
+                }
+
+                currentDir = currentDir.containedDirs.Find(x => x.name == dir);
 
             }
 
@@ -172,148 +154,38 @@ namespace AdventOfCode {
 
                 if (line[0] == '$') {
 
-                    if (line.Substring(2, 2) == "cd") {
+                    if (!(line.Substring(2, 2) == "cd")) continue;
 
-                        if (line.Substring(5, line.Length - 5) == "..") {
+                    string dir = line.Substring(5, line.Length - 5);
 
-                            AdventOfCode.PrintWithColor($"Before .. - {currentDirectory} - {currentPath}", ConsoleColor.Magenta);
-
-                            AdventOfCode.PrintWithColor(GetLastSlashPosition() + " - " + currentPath.Substring(GetLastSlashPosition()), ConsoleColor.White);
-
-                            if (currentPath.Count(x => x == '/') == 1) {
-
-                                currentPath = "/";
-                                currentDirectory = "/";
-
-                                continue;
-
-                            }
-
-                            currentPath = currentPath.Remove(GetLastSlashPosition());
-
-                            currentDirectory = currentPath.Substring(GetLastSlashPosition() + 1, currentPath.Length - GetLastSlashPosition() - 1);
-
-                            AdventOfCode.PrintWithColor($"After .. - {currentDirectory} - {currentPath}", ConsoleColor.Magenta);
-
-                            Console.WriteLine($"Switched to parent folder: {currentPath} - {currentDirectory}");
-
-                            continue;
-
-                        }
-
-                        currentDirectory = line.Substring(5, line.Length - 5);
-
-                        AdventOfCode.PrintWithColor(currentDirectory, ConsoleColor.Yellow);
-
-                        AdventOfCode.PrintWithColor(currentDirectory, ConsoleColor.Red);
-
-                        if (currentPath == "/" && currentDirectory == "/") {
-
-                            continue;
-
-                        }
-
-                        if (currentPath == "/") {
-
-                            currentPath += currentDirectory;
-
-                        } else {
-
-                            currentPath += "/" + currentDirectory;
-
-                        }
-
-                        AdventOfCode.PrintWithColor(currentPath);
-
-                        if (!DirectoryExists(currentDirectory)) {
-
-                            directories.Add(new Directory(currentDirectory, currentPath));
-
-                        }
-
-                        Console.WriteLine($"Changed directory to {currentDirectory}, current path is {currentPath}");
-
-                    } else if (line.Substring(2, 2) == "ls") {
-
-                        Console.WriteLine("Listing all files");
-
-                    }
+                    ChangeDirectory(dir);
 
                 } else {
 
-                    if (line.Substring(0, 3) == "dir") {
+                    if (!char.IsDigit(line[0])) continue;
 
-                        string name = line.Substring(4, line.Length - 4);
+                    int size = int.Parse(line.Split(' ')[0]);
+                    string fileName = line.Split(' ')[1];
 
-                        string path = string.Empty;
+                    if (currentDir.Contains(fileName)) continue;
 
-                        if (currentPath == "/") {
-
-                            path = $"/{name}";
-                        
-                        } else {
-                        
-                            path = $"{currentPath}/{name}";
-                        
-                        }
-
-                        if (!DirectoryExists(name)) {
-
-                            directories.Add(new Directory(name, path));
-
-                            Console.WriteLine($"Found new directory: {name} - {path}");
-
-                        }
-                        
-                        Directory currentDir = GetDirectory(currentDirectory);
-                        Directory newDir = GetDirectory(name);
-
-                        if (currentDir.Contains(newDir)) continue;
-
-                        currentDir.AddDirectory(newDir);
-
-                        Console.WriteLine($"Adding the found directory to {currentDirectory}");
-
-                    } else if (char.IsDigit(line[0])) {
-
-                        string[] splitLine = line.Split(' ');
-
-                        string fileName = splitLine[1];
-                        int fileSize = int.Parse(splitLine[0]);
-
-                        if (!GetDirectory(currentDirectory).Contains(fileName)) {
-
-                            GetDirectory(currentDirectory).AddFile(fileName, fileSize);
-
-                            Console.Write("New ");
-
-                        }
-
-                        Console.WriteLine($"File {fileName} in {currentDirectory} has a size of {fileSize}");
-
-                    }
+                    currentDir.AddFile(fileName, size);
 
                 }
 
             }
 
-            Console.WriteLine();
-
             foreach (Directory dir in directories) {
 
-                Console.WriteLine($"Get total size of {dir.path}");
+                Console.WriteLine(dir.name);
 
                 int size = dir.GetTotalSize();
-
-                break;
 
                 if (size <= 100000) {
 
                     part1 += size;
 
                 }
-
-                AdventOfCode.PrintWithColor(part1.ToString(), ConsoleColor.Red);
 
             }
 
