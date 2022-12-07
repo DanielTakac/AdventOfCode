@@ -115,6 +115,7 @@ namespace AdventOfCode {
             directories.Add(root);
 
             int part1 = 0;
+            int part2 = 0;
 
             void ChangeDirectory(string dir) {
 
@@ -150,8 +151,6 @@ namespace AdventOfCode {
 
             foreach (string line in input) {
 
-                AdventOfCode.PrintWithColor(line, ConsoleColor.Cyan);
-
                 if (line[0] == '$') {
 
                     if (!(line.Substring(2, 2) == "cd")) continue;
@@ -175,9 +174,9 @@ namespace AdventOfCode {
 
             }
 
-            foreach (Directory dir in directories) {
+            // Part 1
 
-                Console.WriteLine(dir.name);
+            foreach (Directory dir in directories) {
 
                 int size = dir.GetTotalSize();
 
@@ -189,7 +188,45 @@ namespace AdventOfCode {
 
             }
 
+            // Part 2
+
+            int totalDiskSpace = 70000000;
+            int diskSpaceNeeded = 30000000;
+
+            int usedDiskSpace = root.GetTotalSize();
+
+            int freeDiskSpace = totalDiskSpace - usedDiskSpace;
+
+            List<Directory> deletableDirectories = new List<Directory>();
+
+            foreach (Directory dir in directories) {
+
+                int size = dir.GetTotalSize();
+
+                if (size >= diskSpaceNeeded - freeDiskSpace) {
+
+                    deletableDirectories.Add(dir);
+
+                }
+
+            }
+
+            Directory smallestDeletableDir = deletableDirectories[0];
+
+            foreach (Directory dir in deletableDirectories) {
+
+                if (dir.GetTotalSize() < smallestDeletableDir.GetTotalSize()) {
+
+                    smallestDeletableDir = dir;
+
+                }
+
+            }
+
+            part2 = smallestDeletableDir.GetTotalSize();
+
             AdventOfCode.PrintWithColor($"Part 1: {part1}");
+            AdventOfCode.PrintWithColor($"Part 2: {part2}");
 
             Console.ReadKey();
 
