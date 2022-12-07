@@ -8,39 +8,85 @@ namespace AdventOfCode {
 
     class Day7 {
 
+        class Directory {
+
+            string name;
+            string path;
+            int size;
+
+            List<Directory> containedDirectories;
+
+            public Directory() {
+
+                string name = string.Empty;
+                string path = string.Empty;
+                int size = 0;
+
+            }
+
+            public Directory(string name, string path, int size) : this() {
+
+                this.name = name;
+                this.path = path;
+                this.size = size;
+
+            }
+
+            public void AddDirectory(Directory directory) {
+
+                if (containedDirectories.Contains(directory)) return;
+
+                containedDirectories.Add(directory);
+
+            }
+
+        }
+
         static void Main(string[] args) {
 
             string[] input = AdventOfCode.GetInput(path: "demo.txt");
 
-            Dictionary<string, int> directorySizes = new Dictionary<string, int>();
+            List<Directory> directories = new List<Directory>();
 
-            directorySizes.Add("/", 0);
+            directories.Add(new Directory("/", "/", 0));
 
             string currentDirectory = "/";
-
-            bool directoryOutputMode = false;
+            string currentPath = "/";
 
             int part1 = 0;
 
-            foreach (string line in input) {
+            int GetLastSlashPosition(string text = currentPath) {
 
-                if (directoryOutputMode) {
+                int lastSlashPosition = 0;
 
-                    if (line[0] == '$') {
+                for (int i = 0; i < text.Length; i++) {
 
-                        directoryOutputMode = false;
-
-                        continue;
-
-                    }
-
-                    
+                    if (text[i] == '/')
+                        lastSlashPosition = i;
 
                 }
+
+                return lastSlashPosition;
+
+            }
+
+            foreach (string line in input) {
 
                 if (line[0] == '$') {
 
                     if (line.Substring(2, 2) == "cd") {
+
+                        if (line.Substring(5, line.Length - 5) == "..") {
+
+                            currentPath.Remove(GetLastSlashPosition() - 1);
+
+                            currentDirectory = currentPath.Substring(GetLastSlashPosition(), currentPath.Length - GetLastSlashPosition());
+
+                            Console.WriteLine($"Switched to parent folder: {currentPath} - {currentDirectory}");
+
+                            continue;
+
+                        }
 
                         currentDirectory = line.Substring(5, line.Length - 5);
 
