@@ -10,7 +10,7 @@ namespace AdventOfCode {
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput(path: "demo.txt");
+            string[] input = AdventOfCode.GetInput(path: "input.txt");
 
             int part1 = 0;
 
@@ -32,67 +32,53 @@ namespace AdventOfCode {
 
                     }
 
-                    // 30373
-                    // 25512
-                    // 65332
-                    // 33549
-                    // 35390
-
                     if (j < 1) continue;
 
                     bool VisibleFromLeft(int i, int j) {
 
-                        while (j - 1 >= 0 && input[i][j - 1] <= input[i][j]) {
+                        for (int x = j - 1; x >= 0; x--) {
 
-                            if (j - 2 < 0) return true;
-                            
-                            j--;
+                            if (input[i][x] >= input[i][j]) return false;
 
                         }
 
-                        return false;
+                        return true;
 
                     }
 
                     bool VisibleFromRight(int i, int j) {
 
-                        while (j + 1 < input[i].Length && input[i][j + 1] <= input[i][j]) {
+                        for (int x = j + 1; x < input[i].Length; x++) {
 
-                            if (j + 2 > input[i].Length - 1) return true;
-
-                            j++;
+                            if (input[i][x] >= input[i][j]) return false;
 
                         }
 
-                        return false;
+                        return true;
 
                     }
 
                     bool VisibleFromBottom(int i, int j) {
 
-                        while (i + 1 < input[i].Length && input[i + 1][j] <= input[i][j]) {
+                        for (int x = i + 1; x < input.Length; x++) {
 
-                            if (i + 2 > input[i].Length - 1) return true;
-
-                            i++;
+                            if (input[x][j] >= input[i][j]) return false;
 
                         }
 
-                        return false;
+                        return true;
 
                     }
 
                     bool VisibleFromTop(int i, int j) {
 
-                        while (i - 1 >= 0 && input[i - 1][j] <= input[i][j]) {
+                        for (int x = i - 1; x >= 0; x--) {
 
-                            if (i - 2 < 0) return true;
-
-                            i--;
+                            if (input[x][j] >= input[i][j]) return false;
 
                         }
 
-                        return false;
+                        return true;
 
                     }
 
