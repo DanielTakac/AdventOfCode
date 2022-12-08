@@ -42,10 +42,10 @@ namespace AdventOfCode {
 
                     bool VisibleFromLeft(int i, int j) {
 
-                        while (j - 1 >= 0 && input[i][j - 1] < input[i][j]) {
+                        while (j - 1 >= 0 && input[i][j - 1] <= input[i][j]) {
 
                             if (j - 2 < 0) return true;
-
+                            
                             j--;
 
                         }
@@ -56,9 +56,9 @@ namespace AdventOfCode {
 
                     bool VisibleFromRight(int i, int j) {
 
-                        while (j + 1 < input[i].Length && input[i][j + 1] < input[i][j]) {
+                        while (j + 1 < input[i].Length && input[i][j + 1] <= input[i][j]) {
 
-                            if (j >= input[i].Length) return true;
+                            if (j + 2 > input[i].Length - 1) return true;
 
                             j++;
 
@@ -68,10 +68,38 @@ namespace AdventOfCode {
 
                     }
 
-                    if (VisibleFromLeft(i, j) || VisibleFromRight(i, j)) {
+                    bool VisibleFromBottom(int i, int j) {
+
+                        while (i + 1 < input[i].Length && input[i + 1][j] <= input[i][j]) {
+
+                            if (i + 2 > input[i].Length - 1) return true;
+
+                            i++;
+
+                        }
+
+                        return false;
+
+                    }
+
+                    bool VisibleFromTop(int i, int j) {
+
+                        while (i - 1 >= 0 && input[i - 1][j] <= input[i][j]) {
+
+                            if (i - 2 < 0) return true;
+
+                            i--;
+
+                        }
+
+                        return false;
+
+                    }
+
+                    if (VisibleFromLeft(i, j) || VisibleFromRight(i, j) || VisibleFromBottom(i, j) || VisibleFromTop(i, j)) {
 
                         Console.Write($"Adding {input[i][j]} at index [{i}, {j}] - ");
-                        Console.WriteLine($"Left: {VisibleFromLeft(i, j)} - Right: {VisibleFromRight(i, j)}");
+                        Console.WriteLine($"Left: {VisibleFromLeft(i, j)} - Right: {VisibleFromRight(i, j)} - Bottom: {VisibleFromBottom(i, j)} - Top: {VisibleFromTop(i, j)}");
 
                         part1++;
 
