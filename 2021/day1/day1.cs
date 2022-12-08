@@ -11,38 +11,32 @@ namespace AdventOfCode {
         static void Main(string[] args) {
 
             string[] input = AdventOfCode.GetInput();
-
-            int previousMeasurement = 0;
-
-            int part1 = 0;
             
-            foreach (string line in input) {
+            int part1 = 0;
+            int part2 = 0;
+            
+            for (int i = 1; i < input.Length; i++) {
 
-                int currentMeaserement = int.Parse(line);
+                // Part 1
 
-                Console.Write(currentMeaserement);
+                int currentMeasurement = int.Parse(input[i]);
+                int previousMeasurement = int.Parse(input[i - 1]);
 
-                if (previousMeasurement == 0) {
+                if (currentMeasurement > previousMeasurement) part1++;
 
-                    Console.WriteLine(" (N/A - no previous measurement)");
-                    
-                } else if (currentMeaserement > previousMeasurement) {
+                // Part 2
 
-                    Console.WriteLine(" (increased)");
+                if (i >= input.Length - 2) continue;
 
-                    part1++;
+                int currentWindow = int.Parse(input[i]) + int.Parse(input[i + 1]) + int.Parse(input[i + 2]);
+                int previousWindow = int.Parse(input[i - 1]) + int.Parse(input[i]) + int.Parse(input[i + 1]);
 
-                } else {
-
-                    Console.WriteLine(" (decreased)");
-
-                }
-
-                previousMeasurement = currentMeaserement;
+                if (currentWindow > previousWindow) part2++;
 
             }
 
-            AdventOfCode.PrintWithColor($"\nPart 1: {part1}");
+            AdventOfCode.PrintWithColor($"Part 1: {part1}");
+            AdventOfCode.PrintWithColor($"Part 2: {part2}");
             
             Console.ReadKey();
 
