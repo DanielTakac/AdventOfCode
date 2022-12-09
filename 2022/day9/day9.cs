@@ -12,83 +12,14 @@ namespace AdventOfCode {
 
             string[] input = AdventOfCode.GetInput(path: "demo.txt");
 
-            int[] head = new int[2];
-            int[] tail = new int[2];
+            int[] head = new int[] { 0, 0 };
+            int[] tail = new int[] { 0, 0 };
 
             List<int[]> visitedPositions = new List<int[]>();
             
-            foreach (string line in input) {
+            visitedPositions.Add(new int[] { 0, 0 });
 
-                char direction = line[0];
-                int distance = int.Parse(line.Split(' ')[1]);
-
-                switch (direction) {
-
-                    case 'L':
-
-                        for (int i = 0; i < distance; i++) {
-
-                            visitedPositions.Add(new int[] { head[0], head[1] });
-
-                            tail[0] = head[0];
-
-                            head[0]--;
-
-                        }
-
-                        break;
-
-                    case 'R':
-
-                        for (int i = 0; i < distance; i++) {
-
-                            visitedPositions.Add(new int[] { head[0], head[1] });
-
-                            tail[0] = head[0];
-
-                            head[0]++;
-
-                        }
-
-                        break;
-
-                    case 'U':
-
-                        for (int i = 0; i < distance; i++) {
-
-                            visitedPositions.Add(new int[] { head[0], head[1] });
-
-                            tail[1] = head[1];
-
-                            head[1]++;
-
-                        }
-
-                        break;
-
-                    case 'D':
-
-                        for (int i = 0; i < distance; i++) {
-
-                            visitedPositions.Add(new int[] { head[0], head[1] });
-
-                            tail[1] = head[1];
-
-                            head[1]--;
-
-                        }
-
-                        break;
-
-                    default:
-
-                        AdventOfCode.PrintWithColor("Error!", ConsoleColor.Red);
-
-                        break;
-
-                }
-
-                Console.WriteLine($"== {direction} {distance} ==\n");
+            void PrintCurrentPositions() {
 
                 for (int i = 4; i >= 0; i--) {
 
@@ -104,7 +35,7 @@ namespace AdventOfCode {
 
                         } else if (i == 0 && j == 0) {
 
-                            Console.Write("S");
+                            Console.Write("s");
 
                         } else {
 
@@ -119,6 +50,93 @@ namespace AdventOfCode {
                 }
 
                 Console.WriteLine();
+
+            }
+
+            foreach (string line in input) {
+
+                char direction = line[0];
+                int distance = int.Parse(line.Split(' ')[1]);
+
+                Console.WriteLine($"== {direction} {distance} ==\n");
+
+                switch (direction) {
+
+                    case 'L':
+
+                        for (int i = 0; i < distance; i++) {
+
+                            visitedPositions.Add(new int[] { head[0], head[1] });
+
+                            tail[0] = head[0];
+                            tail[1] = head[1];
+
+                            head[0]--;
+
+                            PrintCurrentPositions();
+
+                        }
+
+                        break;
+
+                    case 'R':
+
+                        for (int i = 0; i < distance; i++) {
+
+                            visitedPositions.Add(new int[] { head[0], head[1] });
+
+                            tail[0] = head[0];
+                            tail[1] = head[1];
+
+                            head[0]++;
+
+                            PrintCurrentPositions();
+
+                        }
+
+                        break;
+
+                    case 'U':
+
+                        for (int i = 0; i < distance; i++) {
+
+                            visitedPositions.Add(new int[] { head[0], head[1] });
+
+                            tail[0] = head[0];
+                            tail[1] = head[1];
+
+                            head[1]++;
+
+                            PrintCurrentPositions();
+
+                        }
+
+                        break;
+
+                    case 'D':
+
+                        for (int i = 0; i < distance; i++) {
+
+                            visitedPositions.Add(new int[] { head[0], head[1] });
+
+                            tail[0] = head[0];
+                            tail[1] = head[1];
+
+                            head[1]--;
+
+                            PrintCurrentPositions();
+
+                        }
+
+                        break;
+
+                    default:
+
+                        AdventOfCode.PrintWithColor("Error!", ConsoleColor.Red);
+
+                        break;
+
+                }
 
             }
 
