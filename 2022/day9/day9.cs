@@ -10,7 +10,7 @@ namespace AdventOfCode {
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput(path: "demo.txt");
+            string[] input = AdventOfCode.GetInput(path: "input.txt");
 
             int[] head = new int[] { 0, 0 };
             int[] tail = new int[] { 0, 0 };
@@ -66,14 +66,18 @@ namespace AdventOfCode {
 
                         for (int i = 0; i < distance; i++) {
 
-                            visitedPositions.Add(new int[] { head[0], head[1] });
+                            if (head[0] < tail[0]) {
 
-                            tail[0] = head[0];
-                            tail[1] = head[1];
+                                tail[0] = head[0];
+                                tail[1] = head[1];
+
+                                visitedPositions.Add(new int[] { tail[0], tail[1] });
+
+                            }
 
                             head[0]--;
 
-                            PrintCurrentPositions();
+                            // PrintCurrentPositions();
 
                         }
 
@@ -83,14 +87,18 @@ namespace AdventOfCode {
 
                         for (int i = 0; i < distance; i++) {
 
-                            visitedPositions.Add(new int[] { head[0], head[1] });
+                            if (head[0] > tail[0]) {
 
-                            tail[0] = head[0];
-                            tail[1] = head[1];
+                                tail[0] = head[0];
+                                tail[1] = head[1];
+
+                                visitedPositions.Add(new int[] { tail[0], tail[1] });
+
+                            }
 
                             head[0]++;
 
-                            PrintCurrentPositions();
+                            // PrintCurrentPositions();
 
                         }
 
@@ -100,14 +108,18 @@ namespace AdventOfCode {
 
                         for (int i = 0; i < distance; i++) {
 
-                            visitedPositions.Add(new int[] { head[0], head[1] });
+                            if (head[1] > tail[1]) {
 
-                            tail[0] = head[0];
-                            tail[1] = head[1];
+                                tail[0] = head[0];
+                                tail[1] = head[1];
+
+                                visitedPositions.Add(new int[] { tail[0], tail[1] });
+
+                            }
 
                             head[1]++;
 
-                            PrintCurrentPositions();
+                            // PrintCurrentPositions();
 
                         }
 
@@ -117,14 +129,18 @@ namespace AdventOfCode {
 
                         for (int i = 0; i < distance; i++) {
 
-                            visitedPositions.Add(new int[] { head[0], head[1] });
+                            if (head[1] < tail[1]) {
 
-                            tail[0] = head[0];
-                            tail[1] = head[1];
+                                tail[0] = head[0];
+                                tail[1] = head[1];
+
+                                visitedPositions.Add(new int[] { tail[0], tail[1] });
+
+                            }
 
                             head[1]--;
 
-                            PrintCurrentPositions();
+                            // PrintCurrentPositions();
 
                         }
 
@@ -138,11 +154,14 @@ namespace AdventOfCode {
 
                 }
 
+                AdventOfCode.PrintWithColor($"{head[0]} - {head[1]}", ConsoleColor.Cyan);
+                AdventOfCode.PrintWithColor($"{tail[0]} - {tail[1]}\n", ConsoleColor.Cyan);
+
             }
 
-            for (int i = 4; i >= 0; i--) {
+            for (int i = 100; i >= -150 ; i--) { // 4
 
-                for (int j = 0; j < 6; j++) {
+                for (int j = -120; j < 80; j++) { // 6
 
                     bool isVisited = false;
 
@@ -174,7 +193,7 @@ namespace AdventOfCode {
 
             Console.WriteLine();
 
-            int part1 = visitedPositions.Distinct().Count();
+            int part1 = visitedPositions.Distinct().Count() - 1;
 
             AdventOfCode.PrintWithColor($"{head[0]} - {head[1]}", ConsoleColor.Cyan);
             AdventOfCode.PrintWithColor($"{tail[0]} - {tail[1]}\n", ConsoleColor.Cyan);
