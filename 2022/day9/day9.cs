@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AdventOfCode {
 
-    class Day8 {
+    class Day9 {
 
         static void Main(string[] args) {
 
