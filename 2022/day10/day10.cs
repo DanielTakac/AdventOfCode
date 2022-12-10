@@ -10,13 +10,30 @@ namespace AdventOfCode {
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput(path: "demo.txt");
+            string[] input = AdventOfCode.GetInput(path: "input.txt");
 
             // input = new string[] { "noop", "addx 3", "addx -5" };
 
+            int totalSignalStrength = 0;
             int importantCycle = 20;
             int cycle = 1;
             int x = 1;
+
+            void CheckImportantCycle() {
+
+                if (cycle == importantCycle) {
+
+                    int signalStrength = x * cycle;
+
+                    totalSignalStrength += signalStrength;
+
+                    AdventOfCode.PrintWithColor($"Cycle: {cycle}\nSignal Strength: {signalStrength}\nTotal Signal Strength: {totalSignalStrength}\n", ConsoleColor.Gray);
+
+                    importantCycle += 40;
+
+                }
+
+            }
 
             foreach (string line in input) {
 
@@ -27,26 +44,26 @@ namespace AdventOfCode {
                 if (instruction == "noop") {
 
                     cycle++;
+
                     AdventOfCode.PrintWithColor($"Cycle: {cycle}\n", ConsoleColor.Magenta);
-                    continue;
 
-                }
+                    CheckImportantCycle();
 
-                int v = int.Parse(line.Split(' ')[1]);
+                } else {
 
-                cycle += 2;
+                    int v = int.Parse(line.Split(' ')[1]);
 
-                x += v;
+                    cycle++;
 
-                AdventOfCode.PrintWithColor($"Cycle: {cycle}\nV: {v}\nX:{x}\n", ConsoleColor.Yellow);
+                    CheckImportantCycle();
 
-                if (cycle == importantCycle) {
+                    cycle++;
 
-                    int signalStrength = x * cycle;
+                    x += v;
 
-                    AdventOfCode.PrintWithColor($"Cycle: {cycle}\nSignal Strength: {signalStrength}\n", ConsoleColor.Gray);
+                    CheckImportantCycle();
 
-                    importantCycle += 40;
+                    AdventOfCode.PrintWithColor($"Cycle: {cycle}\nV: {v}\nX:{x}\n", ConsoleColor.Yellow);
 
                 }
 
@@ -54,6 +71,7 @@ namespace AdventOfCode {
 
             AdventOfCode.PrintWithColor($"Cycle: {cycle}");
             AdventOfCode.PrintWithColor($"X: {x}");
+            AdventOfCode.PrintWithColor($"Part 1: {totalSignalStrength}");
 
             Console.ReadKey();
 
