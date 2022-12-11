@@ -10,7 +10,7 @@ namespace AdventOfCode {
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput(path: "input.txt");
+            string[] input = AdventOfCode.GetInput();
 
             int totalSignalStrength = 0;
             int importantCycle = 20;
@@ -72,10 +72,41 @@ namespace AdventOfCode {
             x = 1;
 
             int position = 0;
-
             int rowNumber = 0;
 
             List<string> rows = new List<string> { string.Empty };
+
+            void Draw() {
+
+                if (position <= x + 1 && position >= x - 1) {
+
+                    rows[rowNumber] += "#";
+
+                } else {
+
+                    rows[rowNumber] += " ";
+
+                }
+
+            }
+
+            void NextPostion() {
+
+                if (position == 39) {
+
+                    rows.Add(string.Empty);
+
+                    rowNumber++;
+
+                    position = 0;
+
+                } else {
+
+                    position++;
+
+                }
+
+            }
 
             foreach (string line in input) {
 
@@ -85,89 +116,21 @@ namespace AdventOfCode {
 
                     int v = int.Parse(line.Split(' ')[1]);
 
-                    Console.WriteLine($"\nInstruction: {instruction}");
-                    Console.WriteLine($"Position: {position} - X: {x} - V: {v}");
+                    Draw();
 
-                    if (position <= x + 1 && position >= x - 1) {
+                    NextPostion();
 
-                        rows[rowNumber] += "#";
+                    Draw();
 
-                    } else {
-
-                        rows[rowNumber] += " ";
-
-                    }
-
-                    if (position is 39 or 79 or 119 or 159 or 199 or 139) {
-
-                        rows.Add(string.Empty);
-
-                        rowNumber++;
-
-                        position = 0;
-
-                    } else {
-
-                        position++;
-
-                    }
-
-                    Console.WriteLine($"Position: {position} - X: {x} - V: {v}");
-
-                    if (position <= x + 1 && position >= x - 1) {
-
-                        rows[rowNumber] += "#";
-
-                    } else {
-
-                        rows[rowNumber] += " ";
-
-                    }
-
-                    if (position is 39 or 79 or 119 or 159 or 199 or 239) {
-
-                        rows.Add(string.Empty);
-
-                        rowNumber++;
-
-                        position = 0;
-
-                    } else {
-
-                        position++;
-
-                    }
+                    NextPostion();
 
                     x += v;
 
                 } else {
 
-                    Console.WriteLine($"\nInstruction: noop");
-                    Console.WriteLine($"Position: {position} - X: {x}");
+                    Draw();
 
-                    if (position <= x + 1 && position >= x - 1) {
-
-                        rows[rowNumber] += "#";
-
-                    } else {
-
-                        rows[rowNumber] += " ";
-
-                    }
-
-                    if (position is 39 or 79 or 119 or 159 or 199 or 139) {
-
-                        rows.Add(string.Empty);
-
-                        rowNumber++;
-
-                        position = 0;
-
-                    } else {
-
-                        position++;
-
-                    }
+                    NextPostion();
 
                 }
 
