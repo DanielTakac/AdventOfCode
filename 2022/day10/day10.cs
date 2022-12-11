@@ -17,6 +17,11 @@ namespace AdventOfCode {
             int cycle = 1;
             int x = 1;
 
+            int position = 0;
+            int rowNumber = 0;
+
+            List<string> rows = new List<string> { string.Empty };
+
             void CheckImportantCycle() {
 
                 if (cycle == importantCycle) {
@@ -25,56 +30,11 @@ namespace AdventOfCode {
 
                     totalSignalStrength += signalStrength;
 
-                    AdventOfCode.PrintWithColor($"Cycle: {cycle}\nSignal Strength: {signalStrength}\nTotal Signal Strength: {totalSignalStrength}\n", ConsoleColor.Gray);
-
                     importantCycle += 40;
 
                 }
 
             }
-
-            foreach (string line in input) {
-
-                string instruction = line.Substring(0, 4);
-
-                AdventOfCode.PrintWithColor(line.Substring(0, 4), ConsoleColor.Cyan);
-
-                if (instruction == "noop") {
-
-                    cycle++;
-
-                    AdventOfCode.PrintWithColor($"Cycle: {cycle}\n", ConsoleColor.Magenta);
-
-                    CheckImportantCycle();
-
-                } else {
-
-                    int v = int.Parse(line.Split(' ')[1]);
-
-                    cycle++;
-
-                    CheckImportantCycle();
-
-                    cycle++;
-
-                    x += v;
-
-                    CheckImportantCycle();
-
-                    AdventOfCode.PrintWithColor($"Cycle: {cycle}\nV: {v}\nX:{x}\n", ConsoleColor.Yellow);
-
-                }
-
-            }
-
-            // Part 2
-
-            x = 1;
-
-            int position = 0;
-            int rowNumber = 0;
-
-            List<string> rows = new List<string> { string.Empty };
 
             void Draw() {
 
@@ -90,7 +50,7 @@ namespace AdventOfCode {
 
             }
 
-            void NextPostion() {
+            void NextPosition() {
 
                 if (position == 39) {
 
@@ -112,31 +72,43 @@ namespace AdventOfCode {
 
                 string instruction = line.Substring(0, 4);
 
-                if (instruction == "addx") {
+                if (instruction == "noop") {
 
-                    int v = int.Parse(line.Split(' ')[1]);
+                    cycle++;
 
-                    Draw();
-
-                    NextPostion();
+                    CheckImportantCycle();
 
                     Draw();
 
-                    NextPostion();
-
-                    x += v;
+                    NextPosition();
 
                 } else {
 
+                    int v = int.Parse(line.Split(' ')[1]);
+
+                    cycle++;
+
+                    CheckImportantCycle();
+
                     Draw();
 
-                    NextPostion();
+                    NextPosition();
+
+                    cycle++;
+
+                    Draw();
+
+                    NextPosition();
+
+                    x += v;
+
+                    CheckImportantCycle();
 
                 }
 
             }
 
-            AdventOfCode.PrintWithColor($"\nPart 1: {totalSignalStrength}");
+            AdventOfCode.PrintWithColor($"Part 1: {totalSignalStrength}");
             AdventOfCode.PrintWithColor("\nPart 2:\n");
 
             foreach (string row in rows) {
