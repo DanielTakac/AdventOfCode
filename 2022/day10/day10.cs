@@ -12,8 +12,6 @@ namespace AdventOfCode {
 
             string[] input = AdventOfCode.GetInput(path: "input.txt");
 
-            // input = new string[] { "noop", "addx 3", "addx -5" };
-
             int totalSignalStrength = 0;
             int importantCycle = 20;
             int cycle = 1;
@@ -69,9 +67,120 @@ namespace AdventOfCode {
 
             }
 
-            AdventOfCode.PrintWithColor($"Cycle: {cycle}");
-            AdventOfCode.PrintWithColor($"X: {x}");
-            AdventOfCode.PrintWithColor($"Part 1: {totalSignalStrength}");
+            // Part 2
+
+            x = 1;
+
+            int position = 0;
+
+            int rowNumber = 0;
+
+            List<string> rows = new List<string> { string.Empty };
+
+            foreach (string line in input) {
+
+                string instruction = line.Substring(0, 4);
+
+                if (instruction == "addx") {
+
+                    int v = int.Parse(line.Split(' ')[1]);
+
+                    Console.WriteLine($"\nInstruction: {instruction}");
+                    Console.WriteLine($"Position: {position} - X: {x} - V: {v}");
+
+                    if (position <= x + 1 && position >= x - 1) {
+
+                        rows[rowNumber] += "#";
+
+                    } else {
+
+                        rows[rowNumber] += " ";
+
+                    }
+
+                    if (position is 39 or 79 or 119 or 159 or 199 or 139) {
+
+                        rows.Add(string.Empty);
+
+                        rowNumber++;
+
+                        position = 0;
+
+                    } else {
+
+                        position++;
+
+                    }
+
+                    Console.WriteLine($"Position: {position} - X: {x} - V: {v}");
+
+                    if (position <= x + 1 && position >= x - 1) {
+
+                        rows[rowNumber] += "#";
+
+                    } else {
+
+                        rows[rowNumber] += " ";
+
+                    }
+
+                    if (position is 39 or 79 or 119 or 159 or 199 or 239) {
+
+                        rows.Add(string.Empty);
+
+                        rowNumber++;
+
+                        position = 0;
+
+                    } else {
+
+                        position++;
+
+                    }
+
+                    x += v;
+
+                } else {
+
+                    Console.WriteLine($"\nInstruction: noop");
+                    Console.WriteLine($"Position: {position} - X: {x}");
+
+                    if (position <= x + 1 && position >= x - 1) {
+
+                        rows[rowNumber] += "#";
+
+                    } else {
+
+                        rows[rowNumber] += " ";
+
+                    }
+
+                    if (position is 39 or 79 or 119 or 159 or 199 or 139) {
+
+                        rows.Add(string.Empty);
+
+                        rowNumber++;
+
+                        position = 0;
+
+                    } else {
+
+                        position++;
+
+                    }
+
+                }
+
+            }
+
+            AdventOfCode.PrintWithColor($"\nPart 1: {totalSignalStrength}");
+            AdventOfCode.PrintWithColor("\nPart 2:\n");
+
+            foreach (string row in rows) {
+
+                AdventOfCode.PrintWithColor(row, ConsoleColor.Red);
+
+            }
 
             Console.ReadKey();
 
