@@ -12,9 +12,27 @@ namespace AdventOfCode {
 
             string[] input = AdventOfCode.GetInput(path: "demo.txt");
 
-            foreach (string line in input) {
+            void CheckAllPaths(int xPos, int yPos) {
 
-                Console.WriteLine(line);
+                
+
+            }
+
+            for (int x = 0; x < input.Length; x++) {
+
+                for (int y = 0; y < input[x].Length; y++) {
+
+                    if (input[x][y] == 'S' || input[x][y] == 'E') {
+
+                        AdventOfCode.PrintWithColor("TEST", ConsoleColor.Red);
+
+                        continue;
+
+                    }
+
+                    CheckAllPaths(x, y);
+
+                }
 
             }
 
