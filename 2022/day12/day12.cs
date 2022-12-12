@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode {
 
@@ -12,25 +11,50 @@ namespace AdventOfCode {
 
             string[] input = AdventOfCode.GetInput(path: "demo.txt");
 
-            void CheckAllPaths(int xPos, int yPos) {
+            int[] startPos = new int[2];
+            int[] endPos = new int[2];
 
+            Dictionary<int[], bool> visitedPositions = new Dictionary<int[], bool>();
+
+            int GetHeight(char character) {
+
+                if (character == 'S') {
+
+                    return 0;
+                    
+                } else if (character == 'E') {
+
+                    return 25;
+
+                } else {
+
+                    return (int)character - 97;
+
+                }
                 
-
             }
 
+            void GetNeighbors(int x, int y) {
+
+                
+                
+            }
+            
             for (int x = 0; x < input.Length; x++) {
 
                 for (int y = 0; y < input[x].Length; y++) {
 
-                    if (input[x][y] == 'S' || input[x][y] == 'E') {
+                    if (input[x][y] == 'S') {
 
-                        AdventOfCode.PrintWithColor("TEST", ConsoleColor.Red);
+                        startPos[0] = x;
+                        startPos[1] = y;
 
-                        continue;
+                    } else if (input[x][y] == 'E') {
+
+                        endPos[0] = x;
+                        endPos[1] = y;
 
                     }
-
-                    CheckAllPaths(x, y);
 
                 }
 
