@@ -33,12 +33,6 @@ namespace AdventOfCode {
                 }
                 
             }
-
-            void GetNeighbors(int x, int y) {
-
-                
-                
-            }
             
             for (int x = 0; x < input.Length; x++) {
 
@@ -59,6 +53,10 @@ namespace AdventOfCode {
                 }
 
             }
+
+            // Dijkstras Algorithm
+
+            
 
             Console.ReadKey();
 
