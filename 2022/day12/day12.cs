@@ -36,23 +36,29 @@ namespace AdventOfCode {
 
             // Dijkstra's Algorithm
 
-            var nodes = new List<Node>();
+            var visitedNodes = new Dictionary<int[], bool>();
 
-            for (int i = 0; i < input.Length; i++) {
+            bool IsVisited(Node node) {
 
-                for (int j = 0; j < input[i].Length; j++) {
+                foreach (KeyValuePair<int[], bool> visitedNode in visitedNodes) {
 
-                    nodes.Add(new Node(i, j));
+                    if (visitedNode.Key[0] == node.X && visitedNode.Key[1] == node.Y) {
+
+                        return true;
+
+                    }
 
                 }
 
-            }
+                return false;
 
-            AdventOfCode.PrintWithColor(nodes.Count.ToString());
+            }
 
             var queue = new List<Node>() { new Node(0, 0, 0) };
 
             while (true) {
+
+                foreach (Node coolNode in queue) AdventOfCode.PrintWithColor(coolNode.X + ", " + coolNode.Y + ", " + coolNode.Distance + ", " + coolNode.Height + ", " + IsVisited(coolNode), ConsoleColor.Red);
 
                 Node node = queue.OrderBy(n => n.Distance).First();
 
@@ -60,9 +66,9 @@ namespace AdventOfCode {
 
                 queue.Remove(node);
 
-                if (newNode.Visited) continue;
+                if (IsVisited(newNode)) continue;
 
-                newNode.Visited = true;
+                visitedNodes.Add(new int[] { newNode.X, newNode.Y }, true);
 
                 if (newNode.X == endPos[0] && newNode.Y == endPos[1]) {
 
@@ -77,12 +83,11 @@ namespace AdventOfCode {
 
                     queue.Add(neighbor);
 
+                    AdventOfCode.PrintWithColor(neighbor.X + ", " + neighbor.Y + ", " + neighbor.Distance + ", " + neighbor.Height + ", " + IsVisited(neighbor), ConsoleColor.Yellow); 
+
                 }
 
             }
-
-            Console.WriteLine(startPos[0] + " " + startPos[1]);
-            Console.WriteLine(endPos[0] + " " + endPos[1]);
 
             Console.ReadKey();
 
@@ -94,55 +99,67 @@ namespace AdventOfCode {
             public int Y { get; set; }
             public int Distance { get; set; }
             public int Height { get; set; }
-            public bool Visited { get; set; }
 
-            private Node() {
+            public Node(int x, int y) {
+
+                X = x;
+                Y = y;
 
                 Height = GetHeight();
-                Visited = false;
 
             }
 
-            public Node(int x, int y) : this() {
+            public Node(int x, int y, int distance) {
 
                 X = x;
                 Y = y;
 
+                Distance = distance;
+
+                Height = GetHeight();
+
             }
 
-            public Node(int x, int y, int distance) : this() {
+            public Node(int x, int y, int distance, bool visited) {
 
                 X = x;
                 Y = y;
                 
                 Distance = distance;
 
-            }
-
-            public Node(int x, int y, int distance, bool visited) : this() {
-
-                X = x;
-                Y = y;
-                
-                Distance = distance;
-                Visited = visited;
+                Height = GetHeight();
 
             }
 
             private int GetHeight() {
 
-                char character = AdventOfCode.GetInput(path: "demo.txt")[X][Y];
+                string[] input = AdventOfCode.GetInput(path: "demo.txt");
+
+                if (!(X >= 0 && X < input.Length && Y >= 0 && Y < input[0].Length)) {
+
+                    return -1;
+
+                }
+
+                AdventOfCode.PrintWithColor(X + " - " + Y, ConsoleColor.Cyan);
+
+                char character = input[this.X][this.Y];
+
+                AdventOfCode.PrintWithColor(character.ToString(), ConsoleColor.Cyan);
 
                 if (character == 'S') {
 
+                    AdventOfCode.PrintWithColor(0.ToString(), ConsoleColor.Cyan);
                     return 0;
 
                 } else if (character == 'E') {
-                    
+
+                    AdventOfCode.PrintWithColor(25.ToString(), ConsoleColor.Cyan);
                     return 25;
 
                 } else {
 
+                    AdventOfCode.PrintWithColor(((int)character - 97).ToString(), ConsoleColor.Cyan);
                     return (int)character - 97;
 
                 }
