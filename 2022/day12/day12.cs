@@ -83,19 +83,19 @@ namespace AdventOfCode {
 
             // Dijkstra's Algorithm
 
-            List<Dictionary<int[], bool>> visited = new List<Dictionary<int[], bool>>();
+            var nodes = new List<Node>();
 
             for (int i = 0; i < input.Length; i++) {
 
                 for (int j = 0; j < input[i].Length; j++) {
 
-                    visited.Add(new Dictionary<int[], bool>() { new int[] { i, j }, false });
+                    nodes.Add(new Node(new int[] { i, j }));
 
                 }
 
             }
 
-            List<int[]> queue= new List<int[]>() { new int[] { startPos[0], startPos[1], 0 } };
+            var queue = new List<Node>() { new Node(new int[] { 0, 0 }, 0) };
 
             while (true) {
 
@@ -107,6 +107,37 @@ namespace AdventOfCode {
             Console.WriteLine(endPos[0] + " " + endPos[1]);
 
             Console.ReadKey();
+
+        }
+
+        class Node {
+
+            public int[] Position { get; set; }
+            public int Distance { get; set; }
+            public bool Visited { get; set; }
+
+            public Node(int[] position) {
+
+                Position = position;
+                Visited = false;
+
+            }
+
+            public Node(int[] position, int distance) {
+
+                Position = position;
+                Distance = distance;
+                Visited = false;
+
+            }
+
+            public Node(int[] position, int distance, bool visited) {
+
+                Position = position;
+                Distance = distance;
+                Visited = visited;
+
+            }
 
         }
 
