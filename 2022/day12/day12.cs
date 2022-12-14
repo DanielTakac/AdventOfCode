@@ -54,15 +54,78 @@ namespace AdventOfCode {
 
             }
 
+            int[,] distances = new int[input.Length, input[0].Length];
+
+            for (int x = 0; x < input.Length; x++) {
+
+                for (int y = 0; y < input[x].Length; y++) {
+
+                    distances[x, y] = int.MaxValue;
+
+                }
+
+            }
+
+            distances[startPos[0], startPos[1]] = 0;
+
+            int[] FindSmallestDistance() {
+
+                int[] smallestDistance = new int[2];
+
+                for (int x = 0; x < input.Length; x++) {
+
+                    for (int y = 0; y < input[x].Length; y++) {
+
+                        if (distances[x, y] < distances[smallestDistance[0], smallestDistance[1]]) {
+
+                            smallestDistance[0] = x;
+                            smallestDistance[1] = y;
+
+                        }
+
+                    }
+
+                }
+
+                return smallestDistance;
+
+            }
+
+            Node FindNodeWithSmallestDistance(List<Node> nodes) {
+
+                Node smallestDistanceNode = nodes[0];
+
+                int[] positionOfSmallestNode = FindSmallestDistance();
+
+                foreach (Node node in nodes) {
+
+                    if (node.X == positionOfSmallestNode[0] && node.Y == positionOfSmallestNode[1]) {
+
+                        smallestDistanceNode = node;
+
+                    }
+
+                }
+
+                return smallestDistanceNode;
+
+            }
+
             var queue = new List<Node>() { new Node(0, 0, 0) };
+
+            var test = new NodeTest();
+
+            // test.Test();
+
+            int counter = 0;
 
             while (true) {
 
                 foreach (Node coolNode in queue) AdventOfCode.PrintWithColor(coolNode.X + ", " + coolNode.Y + ", " + coolNode.Distance + ", " + coolNode.Height + ", " + IsVisited(coolNode), ConsoleColor.Red);
 
-                Node node = queue.OrderBy(n => n.Distance).First();
+                Node node = FindNodeWithSmallestDistance(queue);
 
-                Node newNode = new Node(node.X, node.Y, node.Distance);
+                Node newNode = new Node(node.X, node.Y, distances[node.X, node.Y]);
 
                 queue.Remove(node);
 
@@ -77,7 +140,7 @@ namespace AdventOfCode {
 
                 }
 
-                foreach (var neighbor in newNode.Neighbors(new List<Node>())) {
+                foreach (var neighbor in newNode.Neighbors(new List<Node>(), ref counter)) {
 
                     neighbor.Distance++;
 
@@ -90,132 +153,6 @@ namespace AdventOfCode {
             }
 
             Console.ReadKey();
-
-        }
-
-        class Node {
-
-            public int X { get; set; }
-            public int Y { get; set; }
-            public int Distance { get; set; }
-            public int Height { get; set; }
-
-            public Node(int x, int y) {
-
-                X = x;
-                Y = y;
-
-                Height = GetHeight();
-
-            }
-
-            public Node(int x, int y, int distance) {
-
-                X = x;
-                Y = y;
-
-                Distance = distance;
-
-                Height = GetHeight();
-
-            }
-
-            public Node(int x, int y, int distance, bool visited) {
-
-                X = x;
-                Y = y;
-                
-                Distance = distance;
-
-                Height = GetHeight();
-
-            }
-
-            private int GetHeight() {
-
-                string[] input = AdventOfCode.GetInput(path: "demo.txt");
-
-                if (!(X >= 0 && X < input.Length && Y >= 0 && Y < input[0].Length)) {
-
-                    return -1;
-
-                }
-
-                AdventOfCode.PrintWithColor(X + " - " + Y, ConsoleColor.Cyan);
-
-                char character = input[this.X][this.Y];
-
-                AdventOfCode.PrintWithColor(character.ToString(), ConsoleColor.Cyan);
-
-                if (character == 'S') {
-
-                    AdventOfCode.PrintWithColor(0.ToString(), ConsoleColor.Cyan);
-                    return 0;
-
-                } else if (character == 'E') {
-
-                    AdventOfCode.PrintWithColor(25.ToString(), ConsoleColor.Cyan);
-                    return 25;
-
-                } else {
-
-                    AdventOfCode.PrintWithColor(((int)character - 97).ToString(), ConsoleColor.Cyan);
-                    return (int)character - 97;
-
-                }
-
-            }
-
-            public List<Node> Neighbors(List<Node> neighbors) {
-
-                string[] input = AdventOfCode.GetInput(path: "demo.txt");
-
-                Node[] potentialNeighbors = new Node[] {
-                    new Node(X + 1, Y),
-                    new Node(X - 1, Y),
-                    new Node(X, Y + 1),
-                    new Node(X, Y - 1)
-                };
-
-                bool NeighborAlreadyExists(int i) {
-
-                    for (int j = 0; j < neighbors.Count; j++) {
-
-                        if (neighbors[j].X == potentialNeighbors[i].X &&
-                            neighbors[j].Y == potentialNeighbors[j].Y) {
-
-                            return true;
-
-                        }
-
-                    }
-
-                    return false;
-
-                }
-
-                for (int i = 0; i < potentialNeighbors.Length; i++) {
-
-                    if (NeighborAlreadyExists(i)) continue;
-
-                    if (!(potentialNeighbors[i].X >= 0 && potentialNeighbors[i].X < input.Length &&
-                          potentialNeighbors[i].Y >= 0 && potentialNeighbors[i].Y < input[0].Length)) {
-
-                        continue;
-
-                    }
-
-                    if (potentialNeighbors[i].Height <= this.Height) {
-
-                        neighbors.Add(potentialNeighbors[i]);
-
-                    }
-
-                }
-
-                return neighbors;
-
-            }
 
         }
 
