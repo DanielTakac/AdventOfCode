@@ -36,50 +36,37 @@ namespace day13 {
 
         }
 
-        public static string ListToString(List<object> objects) {
+        public static List<object> ParseList(Queue<char> queue) {
 
-            if (objects.Count == 0) {
+            var list = new List<object>();
 
-                return "[]";
+            while (queue.Count > 0 && queue.Peek() != ']') {
 
-            } else if (objects.Count == 1 && objects[0] is int) {
+                if (char.IsDigit(queue.Peek())) {
 
-                return $"[{objects[0]}]";
+                    list.Add(ParseInt(queue));
 
-            } else {
+                } else if (queue.Peek() == '[') {
 
-                string StringifyNestedList(List<object> list) {
+                    queue.Dequeue();
 
-                    string packet = string.Empty;
+                    list.Add(ParseList(queue));
 
-                    packet += "[";
+                } else {
 
-                    for (int i = 0; i < list.Count; i++) {
-
-                        if (list[i] is int) {
-
-                            packet += list[i];
-
-                        } else {
-
-                            packet += StringifyNestedList((List<object>)list[i]);
-
-                        }
-
-                        if (i != list.Count - 1)
-                            packet += ",";
-
-                    }
-
-                    packet += "]";
-
-                    return packet;
+                    queue.Dequeue();
 
                 }
 
-                return StringifyNestedList(objects);
+            }
+
+            if (queue.Count > 0) {
+
+                queue.Dequeue();
 
             }
+
+            return list;
 
         }
 
