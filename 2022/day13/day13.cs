@@ -10,20 +10,28 @@ namespace AdventOfCode {
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput(path: "demo.txt");
+            string[] input = AdventOfCode.GetInput();
 
-            Console.WriteLine("length: " + input.Length);
+            int part1 = 0;
+
+            int j = 1;
 
             for (int i = 0; i < input.Length; i += 3) {
-
-                AdventOfCode.PrintWithColor($"{i}: {input[i]} vs {input[i + 1]}", ConsoleColor.Cyan);
 
                 List<object> packet1 = ListParser.ParseList(ListParser.StringToQueue(input[i].Trim()));
                 List<object> packet2 = ListParser.ParseList(ListParser.StringToQueue(input[i + 1].Trim()));
 
-                Console.WriteLine(Packets.CompareElements(packet1, packet2));
+                if (Packets.CompareElements(packet1, packet2) != 1) {
+
+                    part1 += j;
+
+                }
+
+                j++;
 
             }
+
+            AdventOfCode.PrintWithColor($"Part 1: {part1}");
 
             Console.ReadKey();
             
