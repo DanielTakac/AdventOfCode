@@ -1,4 +1,5 @@
-﻿using System;
+﻿using day13;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,75 +44,19 @@ namespace AdventOfCode {
 
                 AdventOfCode.PrintWithColor($"{i}: {input[i]} vs {input[i + 1]}", ConsoleColor.Cyan);
 
-                List<object> packet1 = ListParser(input[i].Trim());
-                List<object> packet2 = ListParser(input[i + 1].Trim());
+                // List<object> packet1 = ListParser(input[i].Trim());
+                // List<object> packet2 = ListParser(input[i + 1].Trim());
 
                 
 
             }
 
-            Console.WriteLine(ListToString(new List<object>() { 1, new List<object>() { 2, 3, 4 }, 5, new List<object>() { 6, 7, 8}, 9, 10 }));
+
+
+            // Console.WriteLine(ListParser.ListToString(new List<object>() { 1, new List<object>() { 2, 3, new List<object>(), 4 }, 5, new List<object>() { new List<object>() }, new List<object>() { 6, 7, 8}, 9, new List<object>(), 10 }));
 
             Console.ReadKey();
             
-        }
-
-        static public List<object> ListParser(string input) {
-
-            List<object> packet = new List<object>();
-
-
-
-            return new List<object>();
-            
-        }
-
-        static public string ListToString(List<object> objects) {
-
-            if (objects.Count == 0) {
-
-                return "[]";
-
-            } else if (objects.Count == 1 && objects[0] is int) {
-
-                return $"[{objects[0]}]";
-
-            } else {
-
-                string yo(List<object> list) {
-
-                    bool allNumbers = true;
-
-                    string packet = string.Empty;
-
-                    packet += "[";
-
-                    for (int i = 0; i < list.Count; i++) {
-
-                        if (list[i] is int) {
-
-
-
-                        }
-
-                        packet += objects[i];
-
-                        if (i != objects.Count - 1)
-                            packet += ",";
-
-                    }
-
-                    packet += "]";
-
-                    return packet;
-
-
-                }
-
-                return yo(objects);
-
-            }
-
         }
 
     }
