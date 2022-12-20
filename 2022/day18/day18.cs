@@ -10,10 +10,9 @@ namespace AdventOfCode {
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput();
+            string[] input = AdventOfCode.GetInput(path: "demo.txt");
 
-            // 1. Go through the input and add the cubes into a list of a class Cube
-            // 2. Each cube class will have an array of bool sides
+            List<Cube> cubes = new List<Cube>();
 
             foreach (string line in input) {
 
@@ -21,7 +20,25 @@ namespace AdventOfCode {
 
                 Cube cube = new Cube(position);
 
+                cubes.Add(cube);
+
             }
+            
+            for (int i = 0; i < cubes.Count; i++) {
+
+                cubes[i].CheckSides(cubes);
+
+            }
+
+            int notTouchingSides = 0;
+
+            foreach (Cube cube in cubes) {
+
+                notTouchingSides += cube.NotTouchingSides();
+
+            }
+
+            AdventOfCode.PrintWithColor($"Part 1: {notTouchingSides}", ConsoleColor.Green);
 
             Console.ReadKey();
 
