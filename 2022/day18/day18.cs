@@ -10,7 +10,7 @@ namespace AdventOfCode {
 
         static void Main(string[] args) {
 
-            string[] input = AdventOfCode.GetInput(path: "demo.txt");
+            string[] input = AdventOfCode.GetInput();
 
             List<Cube> cubes = new List<Cube>();
 

@@ -25,27 +25,39 @@ namespace day18 {
 
                 if (cube == this) continue;
 
-                // Check if the other cube is adjacent on the x-axis
-                if (Math.Abs(cube.Position[0] - this.Position[0]) <= 1 &&
+                if (cube.Position[0] == this.Position[0] - 1 &&
                     cube.Position[1] == this.Position[1] &&
                     cube.Position[2] == this.Position[2]) {
                     this.Sides[0] = true;
+                }
+
+                if (cube.Position[0] == this.Position[0] + 1 &&
+                    cube.Position[1] == this.Position[1] &&
+                    cube.Position[2] == this.Position[2]) {
                     this.Sides[1] = true;
                 }
 
-                // Check if the other cube is adjacent on the y-axis
-                if (Math.Abs(cube.Position[1] - this.Position[1]) <= 1 &&
+                if (cube.Position[1] == this.Position[1] - 1 &&
                     cube.Position[0] == this.Position[0] &&
                     cube.Position[2] == this.Position[2]) {
                     this.Sides[2] = true;
+                }
+
+                if (cube.Position[1] == this.Position[1] + 1 &&
+                    cube.Position[0] == this.Position[0] &&
+                    cube.Position[2] == this.Position[2]) {
                     this.Sides[3] = true;
                 }
 
-                // Check if the other cube is adjacent on the z-axis
-                if (Math.Abs(cube.Position[2] - this.Position[2]) <= 1 &&
+                if (cube.Position[2] == this.Position[2] - 1 &&
                     cube.Position[0] == this.Position[0] &&
                     cube.Position[1] == this.Position[1]) {
                     this.Sides[4] = true;
+                }
+
+                if (cube.Position[2] == this.Position[2] + 1 &&
+                    cube.Position[0] == this.Position[0] &&
+                    cube.Position[1] == this.Position[1]) {
                     this.Sides[5] = true;
                 }
 
