@@ -78,6 +78,32 @@ namespace AdventOfCode {
 
         }
 
+        /// <summary>
+        /// Prints text to the console with a specified color
+        /// </summary>
+        /// <param name="num">The text to be printed</param>
+        /// <param name="color">The color of the text. Defaults to ConsoleColor.Green</param>
+        public static void PrintWithColor(int num, ConsoleColor color = ConsoleColor.Green) {
+
+            Console.ForegroundColor = color;
+            Console.WriteLine(num);
+            Console.ResetColor();
+
+        }
+
+        /// <summary>
+        /// Prints text to the console with a specified color
+        /// </summary>
+        /// <param name="num">The text to be printed</param>
+        /// <param name="color">The color of the text. Defaults to ConsoleColor.Green</param>
+        public static void PrintWithColor(double num, ConsoleColor color = ConsoleColor.Green) {
+
+            Console.ForegroundColor = color;
+            Console.WriteLine(num);
+            Console.ResetColor();
+
+        }
+
     }
 
 }

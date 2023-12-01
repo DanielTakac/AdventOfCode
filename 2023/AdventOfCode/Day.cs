@@ -21,7 +21,7 @@ namespace AdventOfCode {
             // table.AddColumn(new TableColumn("Solution").Centered());
             // table.AddColumn(new TableColumn("Elapsed time").Centered());
 
-            AnsiConsole.Live(table)
+            /*AnsiConsole.Live(table)
             .Start(ctx => {
                 table.AddColumn(new TableColumn("Part").Centered());
                 ctx.Refresh();
@@ -33,7 +33,7 @@ namespace AdventOfCode {
 
                 // to-do: put all the code in here
 
-            });
+            });*/
 
             Stopwatch sw = new Stopwatch();
 
@@ -43,7 +43,7 @@ namespace AdventOfCode {
 
             long part1Time = sw.ElapsedMilliseconds;
 
-            table.AddRow("Part 1", part1, part1Time.ToString());
+            // table.AddRow("Part 1", part1, part1Time.ToString());
 
             sw.Restart();
             string part2 = Part2();
@@ -51,7 +51,7 @@ namespace AdventOfCode {
 
             long part2Time = sw.ElapsedMilliseconds;
 
-            table.AddRow("Part 2", part2, part2Time.ToString());
+            // table.AddRow("Part 2", part2, part2Time.ToString());
 
         }
 
