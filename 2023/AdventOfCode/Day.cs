@@ -20,6 +20,9 @@ namespace AdventOfCode {
             string part1 = string.Empty;
             string part2 = string.Empty;
 
+            long part1Time = 0;
+            long part2Time = 0;
+
             if (!liveTableUpdates) {
 
                 // Part 1
@@ -28,11 +31,15 @@ namespace AdventOfCode {
                 part1 = Part1();
                 sw.Stop();
 
+                part1Time = sw.ElapsedMilliseconds;
+
                 // Part 2
 
                 sw.Restart();
                 part2 = Part2();
                 sw.Stop();
+
+                part2Time = sw.ElapsedMilliseconds;
 
             }
 
@@ -54,9 +61,9 @@ namespace AdventOfCode {
                     part1 = Part1();
                     sw.Stop();
 
-                }
+                    part1Time = sw.ElapsedMilliseconds;
 
-                long part1Time = sw.ElapsedMilliseconds;
+                }
 
                 string part1TimeStr = part1Time < 1000 ? $"{part1Time}ms" : $"{part1Time / 1000.0}s";
 
@@ -72,6 +79,8 @@ namespace AdventOfCode {
                     sw.Restart();
                     part2 = Part2();
                     sw.Stop();
+
+                    part1Time = sw.ElapsedMilliseconds;
 
                 }
 
