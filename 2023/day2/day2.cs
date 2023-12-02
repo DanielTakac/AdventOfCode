@@ -142,7 +142,7 @@ namespace AdventOfCode {
 
             var day = new Day2();
 
-            day.Solve();
+            day.Solve(true);
 
             Console.ReadKey(true);
 

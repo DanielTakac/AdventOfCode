@@ -165,7 +165,7 @@ namespace AdventOfCode {
 
             Day1 day = new Day1();
 
-            day.Solve();
+            day.Solve(true);
 
             Console.ReadKey(true);
 

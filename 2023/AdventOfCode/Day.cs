@@ -119,7 +119,7 @@ namespace AdventOfCode {
 
         private string GetColorFromTime(long time) {
 
-            string[] colors = new string[] { "darkmagenta_1", "purple_1", "royalblue1", "cornflowerblue", "steelblue1", "darkslategray2", "seagreen1_1", "seagreen1", "seagreen2", "springgreen2_1", "green1", "greenyellow", "yellow1", "gold1", "gold3_1", "orange3", "darkorange3_1", "orangered1", "red1" };
+            string[] colors = new string[] { "darkviolet", "purple_1", "royalblue1", "cornflowerblue", "steelblue1", "darkslategray2", "seagreen1_1", "seagreen1", "seagreen2", "springgreen2_1", "green1", "greenyellow", "yellow1", "gold1", "gold3_1", "orange3", "darkorange3_1", "orangered1", "red1" };
 
             if (time < 1) {
                 return colors[0];
