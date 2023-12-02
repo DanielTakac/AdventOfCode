@@ -10,11 +10,23 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
+            string[] input = AdventOfCode.GetInput("test-input.txt");
+
+            foreach (string str in input) {
+
+                Console.WriteLine(str);
+
+            }
+
+            System.Threading.Thread.Sleep(500);
+
             return string.Empty;
 
         }
 
         protected override string Part2() {
+
+            System.Threading.Thread.Sleep(500);
 
             return string.Empty;
 

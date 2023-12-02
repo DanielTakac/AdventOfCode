@@ -13,7 +13,28 @@ namespace AdventOfCode {
         protected abstract string Part1();
         protected abstract string Part2();
 
-        protected void Solve() {
+        protected void Solve(bool liveTableUpdates = false) {
+
+            Stopwatch sw = new Stopwatch();
+
+            string part1 = string.Empty;
+            string part2 = string.Empty;
+
+            if (!liveTableUpdates) {
+
+                // Part 1
+
+                sw.Start();
+                part1 = Part1();
+                sw.Stop();
+
+                // Part 2
+
+                sw.Restart();
+                part2 = Part2();
+                sw.Stop();
+
+            }
 
             var table = new Table();
 
@@ -25,13 +46,15 @@ namespace AdventOfCode {
                 table.AddColumn(new TableColumn("Elapsed Time").Centered());
                 ctx.Refresh();
 
-                Stopwatch sw = new Stopwatch();
+                if (liveTableUpdates) {
 
-                // Part 1
+                    // Part 1
 
-                sw.Start();
-                string part1 = Part1();
-                sw.Stop();
+                    sw.Start();
+                    part1 = Part1();
+                    sw.Stop();
+
+                }
 
                 long part1Time = sw.ElapsedMilliseconds;
 
@@ -42,11 +65,15 @@ namespace AdventOfCode {
                 table.AddRow("Part 1", part1, coloredPart1TimeStr);
                 ctx.Refresh();
 
-                // Part 2
+                if (liveTableUpdates) {
 
-                sw.Restart();
-                string part2 = Part2();
-                sw.Stop();
+                    // Part 2
+
+                    sw.Restart();
+                    part2 = Part2();
+                    sw.Stop();
+
+                }
 
                 long part2Time = sw.ElapsedMilliseconds;
 
