@@ -70,10 +70,16 @@ namespace AdventOfCode {
         /// </summary>
         /// <param name="text">The text to be printed. Defaults to an empty string</param>
         /// <param name="color">The color of the text. Defaults to ConsoleColor.Green</param>
-        public static void PrintWithColor(string text = "", ConsoleColor color = ConsoleColor.Green) {
+        public static void PrintWithColor(string text = "", ConsoleColor color = ConsoleColor.Green, bool newLine = true) {
 
             Console.ForegroundColor = color;
-            Console.WriteLine(text);
+
+            if (newLine) {
+                Console.WriteLine(text);
+            } else {
+                Console.Write(text);
+            }
+
             Console.ResetColor();
 
         }
@@ -83,10 +89,16 @@ namespace AdventOfCode {
         /// </summary>
         /// <param name="num">The text to be printed</param>
         /// <param name="color">The color of the text. Defaults to ConsoleColor.Green</param>
-        public static void PrintWithColor(int num, ConsoleColor color = ConsoleColor.Green) {
+        public static void PrintWithColor(int num, ConsoleColor color = ConsoleColor.Green, bool newLine = true) {
 
             Console.ForegroundColor = color;
-            Console.WriteLine(num);
+
+            if (newLine) {
+                Console.WriteLine(num);
+            } else {
+                Console.Write(num);
+            }
+
             Console.ResetColor();
 
         }
@@ -96,10 +108,16 @@ namespace AdventOfCode {
         /// </summary>
         /// <param name="num">The text to be printed</param>
         /// <param name="color">The color of the text. Defaults to ConsoleColor.Green</param>
-        public static void PrintWithColor(double num, ConsoleColor color = ConsoleColor.Green) {
+        public static void PrintWithColor(double num, ConsoleColor color = ConsoleColor.Green, bool newLine = true) {
 
             Console.ForegroundColor = color;
-            Console.WriteLine(num);
+
+            if (newLine) {
+                Console.WriteLine(num);
+            } else {
+                Console.Write(num);
+            }
+
             Console.ResetColor();
 
         }
