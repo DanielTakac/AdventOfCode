@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,23 @@ namespace AdventOfCode {
         /// </summary>
         /// <returns>String array with all lines from the text file</returns>
         /// <param name="path">The path to the input text file. Defaults to "input.txt"</param>
-        public static string[] GetInput(string path = "input.txt") => File.ReadAllLines(path);
+        public static string[] GetInput(string path = "input.txt") {
+
+            string[] input = new string[0];
+
+            try {
+
+                input = File.ReadAllLines(path);
+
+            } catch (FileNotFoundException e) {
+
+                AdventOfCode.PrintWithColor(e.Message, ConsoleColor.Red);
+
+            }
+
+            return input;
+
+        }
 
         /// <summary>
         /// Gets the number of lines from a text file
