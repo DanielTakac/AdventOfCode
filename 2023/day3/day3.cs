@@ -10,7 +10,7 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            string[] lines = AdventOfCode.GetInput("input.txt");
+            string[] lines = AdventOfCode.GetInput();
 
             // PrintSchematic(lines);
 
@@ -54,7 +54,7 @@ namespace AdventOfCode {
 
         private List<int> GetPartNumbers(string[] map) {
 
-            List<int> parts = new List<int>();
+            List<int> partNumbers = new List<int>();
 
             for (int rowIndex = 0; rowIndex < map.Length; rowIndex++) {
 
@@ -114,7 +114,7 @@ namespace AdventOfCode {
 
                                 }
 
-                                parts.Add(num);
+                                partNumbers.Add(num);
 
                                 positionsAlreadyFound.Add(lowestIndex);
 
@@ -128,13 +128,112 @@ namespace AdventOfCode {
 
             }
 
-            return parts;
+            return partNumbers;
+
+        }
+
+        private List<int> GetGearRatios(string[] map) {
+
+            List<int> gearRatios = new List<int>();
+
+            for (int rowIndex = 0; rowIndex < map.Length; rowIndex++) {
+
+                string row = map[rowIndex];
+
+                for (int columnIndex = 0; columnIndex < row.Length; columnIndex++) {
+
+                    // Skip if part is not a gear
+                    if (row[columnIndex] != '*') {
+
+                        continue;
+
+                    }
+
+                    List<int> nums = new List<int>();
+
+                    // Find numbers around part
+                    for (int adjacentRowIndex = rowIndex - 1; adjacentRowIndex <= rowIndex + 1; adjacentRowIndex++) {
+
+                        string adjacentRow = map[adjacentRowIndex];
+
+                        List<int> positionsAlreadyFound = new List<int>();
+
+                        for (int adjacentColumnIndex = columnIndex - 1; adjacentColumnIndex <= columnIndex + 1; adjacentColumnIndex++) {
+
+                            if (Char.IsNumber(adjacentRow[adjacentColumnIndex])) {
+
+                                List<int> adjacentColumnsWithNums = new List<int> { adjacentColumnIndex };
+
+                                int i = adjacentColumnIndex - 1;
+
+                                while (i >= 0 && Char.IsNumber(adjacentRow[i])) {
+
+                                    adjacentColumnsWithNums.Add(i);
+
+                                    i--;
+
+                                }
+
+                                i = adjacentColumnIndex + 1;
+
+                                while (i < row.Length && Char.IsNumber(adjacentRow[i])) {
+
+                                    adjacentColumnsWithNums.Add(i);
+
+                                    i++;
+
+                                }
+
+                                int lowestIndex = adjacentColumnsWithNums.Min();
+                                int highestIndex = adjacentColumnsWithNums.Max();
+
+                                string numStr = adjacentRow.Substring(lowestIndex, highestIndex - lowestIndex + 1);
+
+                                int num = int.Parse(numStr);
+
+                                if (positionsAlreadyFound.Contains(lowestIndex)) {
+
+                                    continue;
+
+                                }
+
+                                nums.Add(num);
+
+                                positionsAlreadyFound.Add(lowestIndex);
+
+                            }
+
+                        }
+
+                    }
+
+                    if (nums.Count == 2) {
+
+                        int gearRatio = nums[0] * nums[1];
+
+                        gearRatios.Add(gearRatio);
+
+                    }
+
+                }
+
+            }
+
+            return gearRatios;
 
         }
 
         protected override string Part2() {
 
-            return string.Empty;
+            string[] lines = AdventOfCode.GetInput();
+
+            // PrintSchematic(lines);
+
+            List<int> gearRatios = GetGearRatios(lines);
+
+            int sumOfGearRatios = gearRatios.Sum();
+
+            return sumOfGearRatios.ToString();
 
         }
 
