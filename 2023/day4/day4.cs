@@ -10,7 +10,35 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
+            string[] lines = AdventOfCode.GetInput("example.txt");
+
+            GetWinningNumbers(lines[0]);
+
             return string.Empty;
+
+        }
+
+        private List<int> GetWinningNumbers(string card) {
+
+            string numsStr = card.Split('|')[1].Trim();
+
+            int[] nums = numsStr.Split(' ').Where(s => s != "").Select(int.Parse).ToArray();
+
+            foreach (int num in nums) {
+
+                Console.Write("'" + num + "' ");
+
+            }
+
+            Console.WriteLine();
+
+            return null;
+
+        }
+
+        private List<int> GetMyNumbers(string card) {
+
+            return null;
 
         }
 
