@@ -10,41 +10,108 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            string[] lines = AdventOfCode.GetInput("example.txt");
+            string[] input = AdventOfCode.GetInput();
 
-            GetWinningNumbers(lines[0]);
+            int points = 0;
 
-            return string.Empty;
+            foreach (string card in input) {
+
+                int[] winningNums = GetWinningNumbers(card);
+                int[] myNums = GetMyNumbers(card);
+
+                int pointsOnCard = 0;
+
+                foreach (int num in myNums) {
+
+                    if (winningNums.Contains(num)) {
+
+                        if (pointsOnCard == 0) {
+
+                            pointsOnCard = 1;
+
+                        } else {
+
+                            pointsOnCard *= 2;
+
+                        }
+
+                    }
+
+                }
+
+                points += pointsOnCard;
+
+            }
+
+            return points.ToString();
 
         }
 
-        private List<int> GetWinningNumbers(string card) {
+        private int[] GetWinningNumbers(string card) {
 
             string numsStr = card.Split('|')[1].Trim();
 
             int[] nums = numsStr.Split(' ').Where(s => s != "").Select(int.Parse).ToArray();
 
-            foreach (int num in nums) {
-
-                Console.Write("'" + num + "' ");
-
-            }
-
-            Console.WriteLine();
-
-            return null;
+            return nums;
 
         }
 
-        private List<int> GetMyNumbers(string card) {
+        private int[] GetMyNumbers(string card) {
 
-            return null;
+            string splitCard = card.Split(':')[1].Trim();
+            string numsStr = splitCard.Split('|')[0].Trim();
+
+            int[] nums = numsStr.Split(' ').Where(s => s != "").Select(int.Parse).ToArray();
+
+            return nums;
+
+        }
+
+        private int CheckCard(string[] cards, int i) {
+
+            int[] winningNums = GetWinningNumbers(cards[i]);
+            int[] myNums = GetMyNumbers(cards[i]);
+
+            int copies = 0;
+
+            foreach (int num in myNums) {
+
+                if (winningNums.Contains(num)) {
+
+                    copies++;
+
+                }
+
+            }
+
+            int cardsWon = 0;
+
+            for (int j = 1; j <= copies; j++) {
+
+                cardsWon = CheckCard(cards, i + j);
+
+            }
+
+            Console.WriteLine(cardsWon + " " + copies);
+
+            return cardsWon;
 
         }
 
         protected override string Part2() {
 
-            return string.Empty;
+            string[] cards = AdventOfCode.GetInput("example.txt");
+
+            int cardsWon = 0;
+
+            for (int i = 0; i < cards.Length; i++) {
+
+                cardsWon += CheckCard(cards, i);
+
+            }
+
+            return cardsWon.ToString();
 
         }
 
