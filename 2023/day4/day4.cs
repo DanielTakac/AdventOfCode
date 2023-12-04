@@ -68,13 +68,32 @@ namespace AdventOfCode {
 
         }
 
+        private int CheckCardNoRecursion(string[] cards) {
+
+            int cardsWon = 0;
+
+            foreach (string card in cards) {
+
+                int[] winningNums = GetWinningNumbers(card);
+                int[] myNums = GetMyNumbers(card);
+
+                foreach (int num in myNums) {
+
+                    if (winningNums.Contains(num)) {
+
+                        cardsWon++;
+
+                    }
+
+                }
+
+            }
+
+            return cardsWon;
+
+        }
+
         private int CheckCard(string[] cards, int i) {
-
-            iterations++;
-
-            int iteration = iterations;
-
-            AdventOfCode.PrintWithColor("iteration " + iterations, ConsoleColor.Magenta);
 
             int[] winningNums = GetWinningNumbers(cards[i]);
             int[] myNums = GetMyNumbers(cards[i]);
@@ -99,29 +118,72 @@ namespace AdventOfCode {
 
             }
 
-            AdventOfCode.PrintWithColor($"iteration {iteration} finished: {copies} copies and {cardsWon} cards won");
-
             return copies + cardsWon;
 
         }
 
-        static int iterations;
+        private int CheckCard(string[] cards, int cardId, ref List<int> cardStack) {
 
-        protected override string Part2() {
+            cardStack.RemoveAt(0);
 
-            string[] cards = AdventOfCode.GetInput("example.txt");
+            string card = cards[cardId];
+
+            int[] winningNums = GetWinningNumbers(card);
+            int[] myNums = GetMyNumbers(card);
 
             int cardsWon = 0;
 
-            iterations = 0;
+            foreach (int num in myNums) {
+
+                if (winningNums.Contains(num)) {
+
+                    cardsWon++;
+
+                    cardStack.Add(cardId + cardsWon);
+
+                }
+
+            }
+
+            return cardsWon;
+
+        }
+
+        protected override string Part2() {
+
+            string[] cards = AdventOfCode.GetInput("input.txt");
+
+            int cardsWon = 0;
+
+            List<int> cardStack = new List<int>();
+
+            int[] instancesPerCard = new int[cards.Length];
 
             for (int i = 0; i < cards.Length; i++) {
 
-                AdventOfCode.PrintWithColor($"Card {i + 1}:", ConsoleColor.Yellow);
+                cardStack.Add(i);
 
-                cardsWon += CheckCard(cards, i);
+                cardsWon++;
 
-                AdventOfCode.PrintWithColor("total: " + cardsWon, ConsoleColor.Cyan);
+            }
+
+            while (cardStack.Count != 0) {
+
+                int cardId = cardStack.First();
+
+                instancesPerCard[cardId]++;
+
+                cardsWon += CheckCard(cards, cardId, ref cardStack);
+
+            }
+
+            for (int i = 0; i < instancesPerCard.Length; i++){
+
+                if (instancesPerCard[i] != 0) {
+
+                    AdventOfCode.PrintWithColor(i + 1 + ": " + instancesPerCard[i], ConsoleColor.Cyan);
+
+                }
 
             }
 
