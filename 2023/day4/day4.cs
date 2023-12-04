@@ -51,7 +51,7 @@ namespace AdventOfCode {
 
             string numsStr = card.Split('|')[1].Trim();
 
-            int[] nums = numsStr.Split(' ').Where(s => s != "").Select(int.Parse).ToArray();
+            int[] nums = numsStr.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
 
             return nums;
 
@@ -62,63 +62,22 @@ namespace AdventOfCode {
             string splitCard = card.Split(':')[1].Trim();
             string numsStr = splitCard.Split('|')[0].Trim();
 
-            int[] nums = numsStr.Split(' ').Where(s => s != "").Select(int.Parse).ToArray();
+            int[] nums = numsStr.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
 
             return nums;
 
         }
 
-        private int CheckCardNoRecursion(string[] cards) {
+        private Tuple<int[], int[]> GetNumbers(string card) {
 
-            int cardsWon = 0;
+            string splitCard = card.Split(':')[1].Trim();
+            string myNumsStr = splitCard.Split('|')[0].Trim();
+            string winningNumsStr = splitCard.Split('|')[1].Trim();
 
-            foreach (string card in cards) {
+            int[] myNums = myNumsStr.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+            int[] winningNums = winningNumsStr.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
 
-                int[] winningNums = GetWinningNumbers(card);
-                int[] myNums = GetMyNumbers(card);
-
-                foreach (int num in myNums) {
-
-                    if (winningNums.Contains(num)) {
-
-                        cardsWon++;
-
-                    }
-
-                }
-
-            }
-
-            return cardsWon;
-
-        }
-
-        private int CheckCard(string[] cards, int i) {
-
-            int[] winningNums = GetWinningNumbers(cards[i]);
-            int[] myNums = GetMyNumbers(cards[i]);
-
-            int copies = 0;
-
-            foreach (int num in myNums) {
-
-                if (winningNums.Contains(num)) {
-
-                    copies++;
-
-                }
-
-            }
-
-            int cardsWon = 0;
-
-            for (int j = 1; j <= copies; j++) {
-
-                cardsWon += CheckCard(cards, i + j);
-
-            }
-
-            return copies + cardsWon;
+            return Tuple.Create(myNums, winningNums);
 
         }
 
@@ -128,8 +87,10 @@ namespace AdventOfCode {
 
             string card = cards[cardId];
 
-            int[] winningNums = GetWinningNumbers(card);
-            int[] myNums = GetMyNumbers(card);
+            Tuple<int[], int[]> nums = GetNumbers(card);
+
+            int[] winningNums = nums.Item2;
+            int[] myNums = nums.Item1;
 
             int cardsWon = 0;
 
@@ -169,7 +130,7 @@ namespace AdventOfCode {
 
             while (cardStack.Count != 0) {
 
-                int cardId = cardStack.First();
+                int cardId = cardStack[0];
 
                 instancesPerCard[cardId]++;
 
