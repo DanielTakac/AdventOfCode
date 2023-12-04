@@ -70,6 +70,12 @@ namespace AdventOfCode {
 
         private int CheckCard(string[] cards, int i) {
 
+            iterations++;
+
+            int iteration = iterations;
+
+            AdventOfCode.PrintWithColor("iteration " + iterations, ConsoleColor.Magenta);
+
             int[] winningNums = GetWinningNumbers(cards[i]);
             int[] myNums = GetMyNumbers(cards[i]);
 
@@ -89,15 +95,17 @@ namespace AdventOfCode {
 
             for (int j = 1; j <= copies; j++) {
 
-                cardsWon = CheckCard(cards, i + j);
+                cardsWon += CheckCard(cards, i + j);
 
             }
 
-            Console.WriteLine(cardsWon + " " + copies);
+            AdventOfCode.PrintWithColor($"iteration {iteration} finished: {copies} copies and {cardsWon} cards won");
 
-            return cardsWon;
+            return copies + cardsWon;
 
         }
+
+        static int iterations;
 
         protected override string Part2() {
 
@@ -105,9 +113,15 @@ namespace AdventOfCode {
 
             int cardsWon = 0;
 
+            iterations = 0;
+
             for (int i = 0; i < cards.Length; i++) {
 
+                AdventOfCode.PrintWithColor($"Card {i + 1}:", ConsoleColor.Yellow);
+
                 cardsWon += CheckCard(cards, i);
+
+                AdventOfCode.PrintWithColor("total: " + cardsWon, ConsoleColor.Cyan);
 
             }
 
