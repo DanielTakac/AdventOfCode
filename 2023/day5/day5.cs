@@ -10,7 +10,9 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            string[] input = AdventOfCode.GetInput("input.txt");
+            string[] input = AdventOfCode.GetInput();
+
+            if (input == null || input.Length == 0 ) return string.Empty;
 
             List<LookupTable> lookUpTables = new List<LookupTable>();
 
@@ -24,13 +26,13 @@ namespace AdventOfCode {
 
             foreach (LookupTable lookupTable in lookUpTables) {
 
-                List<int[]> map = GetMap(input, lookupTable.conversionType);
+                List<long[]> map = GetMap(input, lookupTable.conversionType);
 
-                List<int> destRanges = new List<int>();
-                List<int> sourceRanges = new List<int>();
-                List<int> rangeLengths = new List<int>();
+                List<long> destRanges = new List<long>();
+                List<long> sourceRanges = new List<long>();
+                List<long> rangeLengths = new List<long>();
 
-                foreach (int[] ranges in map) {
+                foreach (long[] ranges in map) {
 
                     destRanges.Add(ranges[0]);
                     sourceRanges.Add(ranges[1]);
@@ -44,30 +46,21 @@ namespace AdventOfCode {
 
             }
 
-            int[] seeds = GetSeeds(input);
+            long[] seeds = GetSeeds(input);
 
-            List<int> locations = new List<int>();
+            List<long> locations = new List<long>();
 
-            foreach (int seed in seeds) {
+            foreach (long seed in seeds) {
 
-                int convertedSeed = seed;
-
-                AdventOfCode.PrintWithColor("Seed: " + seed, ConsoleColor.Yellow);
+                long convertedSeed = seed;
 
                 foreach (LookupTable table in lookUpTables) {
-
-                    Console.WriteLine(table.conversionType);
-                    Console.WriteLine("Converted Seed: " + convertedSeed);
 
                     for (int i = 0; i < table.sourceRanges.Count; i++) {
 
                         if (convertedSeed >= table.sourceRanges[i] && convertedSeed < table.sourceRanges[i] + table.rangeLengths[i]) {
 
-                            Console.WriteLine($"Seed {convertedSeed} is between source range {table.sourceRanges[i]} and {table.sourceRanges[i] + table.rangeLengths[i]}");
-                            Console.WriteLine($"{convertedSeed} -> {convertedSeed + table.destRanges[i] - table.sourceRanges[i]}");
-
                             convertedSeed += table.destRanges[i] - table.sourceRanges[i];
-
                             break;
 
                         }
@@ -82,9 +75,9 @@ namespace AdventOfCode {
 
             }
 
-            int lowestLocation = locations[0];
+            long lowestLocation = locations[0];
 
-            foreach (int location in locations) {
+            foreach (long location in locations) {
 
                 if (location < lowestLocation) {
 
@@ -101,28 +94,28 @@ namespace AdventOfCode {
         class LookupTable {
 
             public string conversionType {  get; set; }
-            public List<int> sourceRanges { get; set; }
-            public List<int> destRanges { get; set; }
-            public List<int> rangeLengths { get; set; }
+            public List<long> sourceRanges { get; set; }
+            public List<long> destRanges { get; set; }
+            public List<long> rangeLengths { get; set; }
 
             public LookupTable(string conversionType) {
 
                 this.conversionType = conversionType;
-                sourceRanges = new List<int>();
-                destRanges = new List<int>();
-                rangeLengths = new List<int>();
+                sourceRanges = new List<long>();
+                destRanges = new List<long>();
+                rangeLengths = new List<long>();
 
             }
 
         }
 
-        private int[] GetSeeds(string[] input) {
+        private long[] GetSeeds(string[] input) {
 
-            int[] seeds = input[0].Split(':')[1].Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x.Trim())).ToArray();
+            long[] seeds = input[0].Split(':')[1].Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(x => long.Parse(x.Trim())).ToArray();
 
             Console.Write("Seeds: ");
 
-            foreach (int seed in seeds) {
+            foreach (long seed in seeds) {
 
                 Console.Write(seed + " ");
 
@@ -134,9 +127,9 @@ namespace AdventOfCode {
 
         }
 
-        private List<int[]> GetMap(string[] input, string mapType) {
+        private List<long[]> GetMap(string[] input, string mapType) {
 
-            List<int[]> map = new List<int[]>();
+            List<long[]> map = new List<long[]>();
 
             for (int i = 0; i < input.Length; i++) {
 
@@ -150,7 +143,7 @@ namespace AdventOfCode {
 
                         }
 
-                        int[] values = input[j].Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+                        long[] values = input[j].Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(long.Parse).ToArray();
 
                         map.Add(values);
 
