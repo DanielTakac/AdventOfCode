@@ -69,6 +69,7 @@ namespace AdventOfCode {
 
         }
 
+        // Faster than GetWinningNumbers() and GetMyNumbers() for part 2 because it takes ages to finish
         private Tuple<int[], int[]> GetNumbers(string card) {
 
             string splitCard = card.Split(':')[1].Trim();
@@ -79,35 +80,6 @@ namespace AdventOfCode {
             int[] winningNums = winningNumsStr.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
 
             return Tuple.Create(myNums, winningNums);
-
-        }
-
-        private int CheckCard(string[] cards, int cardId, ref List<int> cardStack) {
-
-            cardStack.RemoveAt(0);
-
-            string card = cards[cardId];
-
-            Tuple<int[], int[]> nums = GetNumbers(card);
-
-            int[] winningNums = nums.Item2;
-            int[] myNums = nums.Item1;
-
-            int cardsWon = 0;
-
-            foreach (int num in myNums) {
-
-                if (winningNums.Contains(num)) {
-
-                    cardsWon++;
-
-                    cardStack.Add(cardId + cardsWon);
-
-                }
-
-            }
-
-            return cardsWon;
 
         }
 
@@ -152,7 +124,7 @@ namespace AdventOfCode {
 
         protected override string Part2() {
 
-            string[] cards = AdventOfCode.GetInput("input.txt");
+            string[] cards = AdventOfCode.GetInput();
 
             int cardsWon = 0;
 
@@ -186,16 +158,6 @@ namespace AdventOfCode {
 
             }
 
-            for (int i = 0; i < instancesPerCard.Length; i++){
-
-                if (instancesPerCard[i] != 0) {
-
-                    AdventOfCode.PrintWithColor(i + 1 + ": " + instancesPerCard[i], ConsoleColor.Cyan);
-
-                }
-
-            }
-
             return cardsWon.ToString();
 
         }
@@ -204,7 +166,7 @@ namespace AdventOfCode {
 
             var day = new Day4();
 
-            day.Solve();
+            day.Solve(true);
 
             Console.ReadKey(true);
 
