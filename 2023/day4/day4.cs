@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -110,6 +111,45 @@ namespace AdventOfCode {
 
         }
 
+        private int PreprocessCard(string card) {
+
+            Tuple<int[], int[]> nums = GetNumbers(card);
+
+            int[] winningNums = nums.Item2;
+            int[] myNums = nums.Item1;
+
+            int cardsWon = 0;
+
+            foreach (int num in myNums) {
+
+                if (winningNums.Contains(num)) {
+
+                    cardsWon++;
+
+                }
+
+            }
+
+            return cardsWon;
+
+        }
+
+        private int CheckPreprocessedCard(int[] cards, int cardId, ref List<int> cardStack) {
+
+            cardStack.RemoveAt(0);
+
+            int cardsWon = cards[cardId];
+
+            for (int i = 1; i <= cardsWon; i++) {
+
+                cardStack.Add(cardId + i);
+
+            }
+
+            return cardsWon;
+
+        }
+
         protected override string Part2() {
 
             string[] cards = AdventOfCode.GetInput("input.txt");
@@ -117,6 +157,14 @@ namespace AdventOfCode {
             int cardsWon = 0;
 
             List<int> cardStack = new List<int>();
+
+            int[] preprocessedCards = new int[cards.Length];
+
+            for (int i = 0; i < preprocessedCards.Length; i++) {
+
+                preprocessedCards[i] = PreprocessCard(cards[i]);
+
+            }
 
             int[] instancesPerCard = new int[cards.Length];
 
@@ -134,7 +182,7 @@ namespace AdventOfCode {
 
                 instancesPerCard[cardId]++;
 
-                cardsWon += CheckCard(cards, cardId, ref cardStack);
+                cardsWon += CheckPreprocessedCard(preprocessedCards, cardId, ref cardStack);
 
             }
 
