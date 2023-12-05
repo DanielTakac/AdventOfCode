@@ -216,3 +216,12 @@ csx/
 *.build.csdef
 
 
+/2023/2023.sln
+/2023/day1/input.txt
+/2023/day1/test-input.txt
+/2023/day2/input.txt
+/2023/day2/test-input.txt
+/2023/day3/input.txt
+/2023/day3/test-input.txt
+/2023/day4/example.txt
+/2023/day4/input.txt
