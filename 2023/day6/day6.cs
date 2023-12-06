@@ -46,12 +46,24 @@ namespace AdventOfCode {
 
         }
 
+        private long GetFullTime(string[] input) {
+
+            return long.Parse(string.Join("", GetTimes(input)));
+
+        }
+
+        private long GetFullDistance(string[] input) {
+
+            return long.Parse(string.Join("", GetDistances(input)));
+
+        }
+
         class Race {
 
-            public int Time { get; private set; }
-            public int Distance { get; private set; }
+            public long Time { get; private set; }
+            public long Distance { get; private set; }
 
-            public Race(int time, int distance) {
+            public Race(long time, long distance) {
 
                 Time = time;
                 Distance = distance;
@@ -62,9 +74,9 @@ namespace AdventOfCode {
 
                 int numberOfWaysToWin = 0;
 
-                for (int timeHeld = 0; timeHeld <= Time; timeHeld++) {
+                for (long timeHeld = 0; timeHeld <= Time; timeHeld++) {
 
-                    int travelTime = Time - timeHeld;
+                    long travelTime = Time - timeHeld;
 
                     if (timeHeld * travelTime > Distance) {
 
@@ -82,7 +94,14 @@ namespace AdventOfCode {
 
         protected override string Part2() {
 
-            return string.Empty;
+            string[] input = AdventOfCode.GetInput();
+
+            long time = GetFullTime(input);
+            long distance = GetFullDistance(input);
+
+            Race race = new Race(time, distance);
+
+            return race.GetNumberOfWaysToWin().ToString();
 
         }
 
