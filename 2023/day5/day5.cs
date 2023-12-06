@@ -200,17 +200,12 @@ namespace AdventOfCode {
 
             }
 
-            long[] seeds = GetSeeds(input);
-
-            List<long> locations = new List<long>();
-
             List<long[]> seedRanges = GetSeedRanges(input);
 
-            Stopwatch sw = new();
+            long lowestLocation = long.MaxValue;
 
             foreach (long[] seedRange in seedRanges) {
 
-                // Change this to int later so it's faster
                 for (long seed = seedRange[0]; seed < seedRange[0] + seedRange[1]; seed++) {
 
                     long convertedSeed = seed;
@@ -230,19 +225,11 @@ namespace AdventOfCode {
 
                     }
 
-                    locations.Add(convertedSeed);
+                    if (convertedSeed < lowestLocation) {
 
-                }
+                        lowestLocation = convertedSeed;
 
-            }
-
-            long lowestLocation = locations[0];
-
-            foreach (long location in locations) {
-
-                if (location < lowestLocation) {
-
-                    lowestLocation = location;
+                    }
 
                 }
 
