@@ -12,6 +12,21 @@ namespace AdventOfCode {
 
             string[] input = AdventOfCode.GetInput("example.txt");
 
+            string[] handTypes = {
+                "none",
+                "High card - 23456",
+                "One pair - A23A4",
+                "Two pair - 23432",
+                "Three of a kind - TTT98",
+                "Full house - 23332",
+                "Four of a kind - AA8AA",
+                "Five of a kind - AAAAA",
+            };
+
+            Hand testHand = new Hand("XXYXX");
+
+            Console.WriteLine(testHand.Cards + ": " + testHand.GetValue() + " " + handTypes[testHand.GetValue()]);
+
             return string.Empty;
 
         }
@@ -24,7 +39,17 @@ namespace AdventOfCode {
 
             public Hand(string cards) {
 
-                Cards = cards;
+                if (cards.Length == 5) {
+
+                    Cards = cards;
+
+                } else {
+
+                    AdventOfCode.PrintWithColor($"Length of cards string {cards} is {cards.Length} but should be 5!", ConsoleColor.Red);
+                    Cards = string.Empty;
+
+                }
+
                 Bid = string.Empty;
                 Value = GetValue();
 
