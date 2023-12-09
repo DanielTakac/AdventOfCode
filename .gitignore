@@ -33,6 +33,8 @@ mono_crash.*
 #[Ll]og/
 #[Ll]ogs/
 net6.0/
+net7.0/
+net8.0/
 *.dll
 *.exe
 PepejdzaBot.BotsRepaired.runtimeconfig
