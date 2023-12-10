@@ -182,6 +182,26 @@ namespace AdventOfCode {
 
         }
 
+        /// <summary>
+        /// Prints text to the console with a specified color
+        /// </summary>
+        /// <param name="b">The text to be printed</param>
+        /// <param name="color">The color of the text. Defaults to ConsoleColor.Green</param>
+        /// <param name="newLine">Wether to user <see cref="Console.WriteLine()"/> or <see cref="Console.Write()"/>. Defaults to true</param>
+        public static void PrintWithColor(bool b, ConsoleColor color = ConsoleColor.Green, bool newLine = true) {
+
+            Console.ForegroundColor = color;
+
+            if (newLine) {
+                Console.WriteLine(b.ToString());
+            } else {
+                Console.Write(b.ToString());
+            }
+
+            Console.ResetColor();
+
+        }
+
     }
 
 }
