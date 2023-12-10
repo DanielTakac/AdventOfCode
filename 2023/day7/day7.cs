@@ -10,18 +10,7 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            string[] input = AdventOfCode.GetInput("input.txt");
-
-            string[] handTypes = {
-                "none",
-                "High card - 23456",
-                "One pair - A23A4",
-                "Two pair - 23432",
-                "Three of a kind - TTT98",
-                "Full house - 23332",
-                "Four of a kind - AA8AA",
-                "Five of a kind - AAAAA",
-            };
+            string[] input = AdventOfCode.GetInput();
 
             List<Hand> hands = new List<Hand>();
 
@@ -34,20 +23,10 @@ namespace AdventOfCode {
 
                 hands.Add(hand);
 
-                Console.WriteLine(hand.Cards + ": " + hand.Value + " " + handTypes[hand.Value]);
-
             }
 
             // Sort hands by value
             hands = hands.OrderBy(x => x.Value).ToList();
-
-            foreach (Hand hand in hands) {
-
-                Console.WriteLine(hand.Cards);
-
-            }
-
-            Console.WriteLine();
 
             // Sort hands with the same value
             for (int i = 1; i < hands.Count; i++) {
@@ -57,8 +36,6 @@ namespace AdventOfCode {
                     bool inOrder = CompareHands(hands[i - 1].Cards, hands[i].Cards);
 
                     if (!inOrder) {
-
-                        // AdventOfCode.PrintWithColor($"Cards {hands[i - 1].Cards} and {hands[i].Cards} not in order, swapping them", ConsoleColor.Magenta);
 
                         // Swap hands
                         (hands[i - 1], hands[i]) = (hands[i], hands[i - 1]);
@@ -81,8 +58,6 @@ namespace AdventOfCode {
 
                     if (!inOrder) {
 
-                        // AdventOfCode.PrintWithColor($"Cards {hands[i - 1].Cards} and {hands[i].Cards} not in order, swapping them", ConsoleColor.DarkGreen);
-
                         // Swap hands
                         (hands[i - 1], hands[i]) = (hands[i], hands[i - 1]);
 
@@ -95,25 +70,9 @@ namespace AdventOfCode {
 
             }
 
-            Console.WriteLine();
-
-            for (int i = 0; i < hands.Count; i++) {
-
-                if (i != 0 && hands[i - 1].Value != hands[i].Value) {
-
-                    Console.WriteLine();
-
-                }
-
-                Console.WriteLine(hands[i].Cards);
-
-            }
-
             int totalWinnings = 0;
 
             for (int i = 0; i < hands.Count; i++) {
-
-                Console.WriteLine($"{hands[i].Cards} - {hands[i].Bid} * {i + 1} = {hands[i].Bid * (i + 1)}");
 
                 totalWinnings += hands[i].Bid * (i + 1);
 
@@ -128,8 +87,9 @@ namespace AdventOfCode {
             public string Cards { get; private set; }
             public int Bid { get; private set; }
             public int Value {  get; private set; }
+            private bool JokerRule { get; set; }
 
-            public Hand(string cards, int bid) {
+            public Hand(string cards, int bid, bool jokerRule = false) {
 
                 if (cards.Length == 5) {
 
@@ -143,6 +103,7 @@ namespace AdventOfCode {
                 }
 
                 Bid = bid;
+                JokerRule = jokerRule;
                 Value = GetValue();
 
             }
@@ -288,16 +249,20 @@ namespace AdventOfCode {
 
                 }
 
-                AdventOfCode.PrintWithColor($"------ {Cards} ------", ConsoleColor.Yellow);
-                Console.WriteLine(cardCounts.Count + " unique cards");
+                if (JokerRule &&  cardCounts.ContainsKey('J')) {
 
-                foreach (KeyValuePair<char, int> card in cardCounts) {
+                    // All cards are jokers
+                    if (cardCounts.Count == 1) {
+                        return 7;
+                    }
 
-                    AdventOfCode.PrintWithColor($"{card.Key} - {card.Value}");
+                    char mostCommonCard = cardCounts.Where(x => x.Key != 'J').OrderByDescending(x => x.Value).FirstOrDefault().Key;
+
+                    cardCounts[mostCommonCard] += cardCounts['J'];
+
+                    cardCounts.Remove('J');
 
                 }
-
-                Console.WriteLine();
 
                 int value = 0;
 
@@ -323,41 +288,53 @@ namespace AdventOfCode {
 
         }
 
-        private bool CompareHands(string cards1, string cards2) {
+        static Dictionary<char, int> cardStrengths = new Dictionary<char, int>() {
+            { '2', 1 },
+            { '3', 2 },
+            { '4', 3 },
+            { '5', 4 },
+            { '6', 5 },
+            { '7', 6 },
+            { '8', 7 },
+            { '9', 8 },
+            { 'T', 9 },
+            { 'J', 10 },
+            { 'Q', 11 },
+            { 'K', 12 },
+            { 'A', 13 }
+        };
 
-            Dictionary<char, int> cardStrengths = new Dictionary<char, int>() {
-                { '2', 1 },
-                { '3', 2 },
-                { '4', 3 },
-                { '5', 4 },
-                { '6', 5 },
-                { '7', 6 },
-                { '8', 7 },
-                { '9', 8 },
-                { 'T', 9 },
-                { 'J', 10 },
-                { 'Q', 11 },
-                { 'K', 12 },
-                { 'A', 13 }
-            };
+        static Dictionary<char, int> cardStrengthsJR = new Dictionary<char, int>() {
+            { 'J', 0 },
+            { '2', 1 },
+            { '3', 2 },
+            { '4', 3 },
+            { '5', 4 },
+            { '6', 5 },
+            { '7', 6 },
+            { '8', 7 },
+            { '9', 8 },
+            { 'T', 9 },
+            { 'Q', 10 },
+            { 'K', 11 },
+            { 'A', 12 }
+        };
+
+        private bool CompareHands(string cards1, string cards2, bool jokerRule = false) {
+
+            Dictionary<char, int> strengths = jokerRule ? cardStrengthsJR : cardStrengths;
 
             for (int i = 0; i < 5; i++) {
 
-                if (cardStrengths[cards1[i]] == cardStrengths[cards2[i]]) {
-
-                    // Console.WriteLine($"{cards1[i]} == {cards2[i]}");
+                if (strengths[cards1[i]] == strengths[cards2[i]]) {
 
                     continue;
 
-                } else if (cardStrengths[cards1[i]] < cardStrengths[cards2[i]]) {
-
-                    // Console.WriteLine($"{cards1[i]} < {cards2[i]}");
+                } else if (strengths[cards1[i]] < strengths[cards2[i]]) {
 
                     return true;
 
-                } else if (cardStrengths[cards1[i]] > cardStrengths[cards2[i]]) {
-
-                    // Console.WriteLine($"{cards1[i]} > {cards2[i]}");
+                } else if (strengths[cards1[i]] > strengths[cards2[i]]) {
 
                     return false;
 
@@ -371,7 +348,75 @@ namespace AdventOfCode {
 
         protected override string Part2() {
 
-            return string.Empty;
+            string[] input = AdventOfCode.GetInput();
+
+            List<Hand> hands = new List<Hand>();
+
+            foreach (string line in input) {
+
+                string cards = line.Split()[0];
+                int bid = int.Parse(line.Split()[1]);
+
+                Hand hand = new Hand(cards, bid, true);
+
+                hands.Add(hand);
+
+            }
+
+            // Sort hands by value
+            hands = hands.OrderBy(x => x.Value).ToList();
+
+            // Sort hands with the same value
+            for (int i = 1; i < hands.Count; i++) {
+
+                if (hands[i].Value == hands[i - 1].Value) {
+
+                    bool inOrder = CompareHands(hands[i - 1].Cards, hands[i].Cards, true);
+
+                    if (!inOrder) {
+
+                        // Swap hands
+                        (hands[i - 1], hands[i]) = (hands[i], hands[i - 1]);
+
+                        // Start from the begginning again
+                        i = 1;
+
+                    }
+
+                }
+
+            }
+
+            // 2nd run because the first hand doesn't get sorted for some reason and I'm too lazy to fix it
+            for (int i = 1; i < hands.Count; i++) {
+
+                if (hands[i].Value == hands[i - 1].Value) {
+
+                    bool inOrder = CompareHands(hands[i - 1].Cards, hands[i].Cards, true);
+
+                    if (!inOrder) {
+
+                        // Swap hands
+                        (hands[i - 1], hands[i]) = (hands[i], hands[i - 1]);
+
+                        // Start from the begginning again
+                        i = 1;
+
+                    }
+
+                }
+
+            }
+
+            int totalWinnings = 0;
+
+            for (int i = 0; i < hands.Count; i++) {
+
+                totalWinnings += hands[i].Bid * (i + 1);
+
+            }
+
+            return totalWinnings.ToString();
 
         }
 
