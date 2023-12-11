@@ -11,7 +11,7 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            string[] input = AdventOfCode.GetInput("input.txt");
+            string[] input = AdventOfCode.GetInput();
 
             Dictionary<string, string[]> nodes = [];
 
@@ -50,9 +50,22 @@ namespace AdventOfCode {
 
         }
 
+        // Greatest Common Divisor
+        static long GCD(long a, long b) {
+            while (b != 0) {
+                (a, b) = (b, a % b);
+            }
+            return a;
+        }
+
+        // Least Common Multiple
+        static long LCM(long a, long b) {
+            return (a / GCD(a, b)) * b;
+        }
+
         protected override string Part2() {
 
-            string[] input = AdventOfCode.GetInput("input.txt");
+            string[] input = AdventOfCode.GetInput();
 
             Dictionary<string, string[]> nodes = [];
 
@@ -69,47 +82,38 @@ namespace AdventOfCode {
             }
 
             string[] currentNodes = nodes.Where(x => x.Key[2] == 'A').Select(x => x.Key).ToArray();
-            currentNodes = [nodes.Where(x => x.Key[2] == 'A').Select(x => x.Key).ToArray()[0]];
-            int steps = 0;
+            int[] steps = new int[currentNodes.Length];
 
-            for (int i = 0; i < instructions.Length; i++) {
+            for (int node = 0; node < currentNodes.Length; node++) {
 
-                Console.Write($"{i} - {instructions[i]} - ");
+                for (int i = 0; i < instructions.Length; i++) {
 
-                foreach (string node in currentNodes) {
+                    currentNodes[node] = (instructions[i] == 'L') ? nodes[currentNodes[node]][0] : nodes[currentNodes[node]][1];
 
-                    Console.Write(node + " ");
+                    steps[node]++;
 
-                }
+                    if (i == instructions.Length - 1) {
 
-                Console.WriteLine();
+                        i = -1;
 
-                // Thread.Sleep(50);
+                    }
 
-                for (int j = 0; j < currentNodes.Length; j++) {
-
-                    currentNodes[j] = (instructions[i] == 'L') ? nodes[currentNodes[j]][0] : nodes[currentNodes[j]][1];
-
-                }
-
-                steps++;
-
-                if (i == instructions.Length - 1) {
-
-                    i = -1;
-
-                }
-
-                // if all nodes end with Z
-                if (currentNodes.Count(x => x[2] == 'Z') == currentNodes.Count()) {
-
-                    break;
+                    if (currentNodes[node][2] == 'Z') break;
 
                 }
 
             }
 
-            return steps.ToString();
+            long lcm = 1;
+
+            // LCM of steps
+            for (int i = 0; i < steps.Length; i++) {
+
+                lcm = LCM(lcm, steps[i]);
+
+            }
+
+            return lcm.ToString();
 
         }
 
