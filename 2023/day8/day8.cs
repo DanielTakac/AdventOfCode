@@ -52,7 +52,64 @@ namespace AdventOfCode {
 
         protected override string Part2() {
 
-            return string.Empty;
+            string[] input = AdventOfCode.GetInput("input.txt");
+
+            Dictionary<string, string[]> nodes = [];
+
+            string instructions = input[0];
+
+            Regex nodeRegex = new Regex("[A-Z0-9]{3}");
+
+            for (int i = 2; i < input.Length; i++) {
+
+                MatchCollection matches = nodeRegex.Matches(input[i]);
+
+                nodes.Add(matches[0].Value, [matches[1].Value, matches[2].Value]);
+
+            }
+
+            string[] currentNodes = nodes.Where(x => x.Key[2] == 'A').Select(x => x.Key).ToArray();
+            currentNodes = [nodes.Where(x => x.Key[2] == 'A').Select(x => x.Key).ToArray()[0]];
+            int steps = 0;
+
+            for (int i = 0; i < instructions.Length; i++) {
+
+                Console.Write($"{i} - {instructions[i]} - ");
+
+                foreach (string node in currentNodes) {
+
+                    Console.Write(node + " ");
+
+                }
+
+                Console.WriteLine();
+
+                // Thread.Sleep(50);
+
+                for (int j = 0; j < currentNodes.Length; j++) {
+
+                    currentNodes[j] = (instructions[i] == 'L') ? nodes[currentNodes[j]][0] : nodes[currentNodes[j]][1];
+
+                }
+
+                steps++;
+
+                if (i == instructions.Length - 1) {
+
+                    i = -1;
+
+                }
+
+                // if all nodes end with Z
+                if (currentNodes.Count(x => x[2] == 'Z') == currentNodes.Count()) {
+
+                    break;
+
+                }
+
+            }
+
+            return steps.ToString();
 
         }
 
