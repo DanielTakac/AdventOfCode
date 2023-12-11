@@ -10,6 +10,8 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
+            string[] input = AdventOfCode.GetInput("example.txt");
+
             return string.Empty;
 
         }
