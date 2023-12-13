@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,31 +11,19 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            List<string> map = AdventOfCode.GetInput("input.txt").ToList();
+            return string.Empty;
 
-            foreach (string line in map) Console.WriteLine(line);
-
-            Console.WriteLine();
-
-            PrintMap(map);
-
-            Console.WriteLine();
+            List<string> map = AdventOfCode.GetInput().ToList();
 
             List<string> expandedMap = ExpandMap(map);
 
-            PrintMap(expandedMap);
-
             List<int[]> galaxies = GetGalaxies(expandedMap);
-
-            int steps = ShortestPath(expandedMap, galaxies[7], galaxies[8]);
 
             int totalSteps = 0;
 
             for (int i = 0; i < galaxies.Count; i++)
                 for (int j = i + 1; j < galaxies.Count; j++)
                     totalSteps += ShortestPath(expandedMap, galaxies[i], galaxies[j]);
-
-            AdventOfCode.PrintWithColor("\nShortest path between galaxies: " + steps + "\n");
 
             return totalSteps.ToString();
 
@@ -64,21 +53,74 @@ namespace AdventOfCode {
 
         private void PrintMap(List<string> map) {
 
-            int counter = 1;
+            int galaxyCounter = 1;
 
             for (int i = 0; i < map.Count; i++) {
 
                 for (int j = 0; j < map[i].Length; j++) {
 
-                    if (map[i][j] == '#') {
+                    switch (map[i][j]) {
 
-                        AdventOfCode.PrintWithColor(counter, ConsoleColor.Yellow, false);
+                        case '#':
+                            AdventOfCode.PrintWithColor(galaxyCounter, ConsoleColor.Yellow, false);
+                            galaxyCounter++;
+                            break;
+                        case 'X':
+                            AdventOfCode.PrintWithColor(map[i][j], ConsoleColor.Cyan, false);
+                            break;
+                        case '$':
+                            AdventOfCode.PrintWithColor(map[i][j], ConsoleColor.Blue, false);
+                            break;
+                        case '@':
+                            AdventOfCode.PrintWithColor(map[i][j], ConsoleColor.Magenta, false);
+                            break;
+                        case '.':
+                            Console.Write(map[i][j]);
+                            break;
 
-                        counter++;
+                    }
 
-                    } else {
+                }
 
-                        Console.Write(map[i][j]);
+                Console.WriteLine();
+
+            }
+
+        }
+
+        private void PrintMap(List<string> map, List<int[]> visited) {
+
+            int galaxyCounter = 1;
+
+            for (int i = 0; i < map.Count; i++) {
+
+                for (int j = 0; j < map[i].Length; j++) {
+
+                    if (visited.Any(x => x[0] == i && x[1] == j)) {
+
+                        AdventOfCode.PrintWithColor('#', ConsoleColor.Green, false);
+                        continue;
+
+                    }
+
+                    switch (map[i][j]) {
+
+                        case '#':
+                            AdventOfCode.PrintWithColor(galaxyCounter, ConsoleColor.Yellow, false);
+                            galaxyCounter++;
+                            break;
+                        case 'X':
+                            AdventOfCode.PrintWithColor(map[i][j], ConsoleColor.Cyan, false);
+                            break;
+                        case '$':
+                            AdventOfCode.PrintWithColor(map[i][j], ConsoleColor.Blue, false);
+                            break;
+                        case '@':
+                            AdventOfCode.PrintWithColor(map[i][j], ConsoleColor.Magenta, false);
+                            break;
+                        case '.':
+                            Console.Write(map[i][j]);
+                            break;
 
                     }
 
@@ -220,9 +262,172 @@ namespace AdventOfCode {
 
         }
 
+        private List<string> ExpandMapPart2(List<string> map) {
+
+            List<int[]> galaxies = GetGalaxies(map);
+
+            // Clone map
+            List<string> expandedMap = new List<string>(map);
+
+            // Expand rows
+            for (int row = 0; row < expandedMap.Count; row++) {
+
+                // If there are no galaxies on this row
+                if (!galaxies.Any(x => x[0] == row)) {
+
+                    expandedMap[row] = expandedMap[row].Replace('.', 'X');
+
+                }
+
+            }
+
+            // Expand columns
+            for (int column = 0; column < expandedMap[0].Length; column++) {
+
+                // If there are no galaxies on this column
+                if (!galaxies.Any(x => x[1] == column)) {
+
+                    // Insert a column at each row
+                    for (int row = 0; row < expandedMap.Count; row++) {
+
+                        if (expandedMap[row][column] == 'X') {
+
+                            expandedMap[row] = new StringBuilder(expandedMap[row]) { [column] = '@' }.ToString();
+
+                        } else {
+
+                            expandedMap[row] = new StringBuilder(expandedMap[row]) { [column] = '$' }.ToString();
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+            return expandedMap;
+
+        }
+
+        private (int, List<int[]>) ShortestPathPart2(List<string> map, int[] g1, int[] g2) {
+
+            int rows = map.Count;
+            int columns = map[0].Length;
+
+            List<int[]> visited = [];
+
+            int steps = 0;
+
+            int[] pos = g1;
+            int[] end = g2;
+
+            // While g2 is not directly above or to the right of g1
+            while (pos[0] != end[0] && pos[1] != end[1]) {
+
+                // go up
+                pos[0]--;
+                steps++;
+                visited.Add(pos);
+
+                // go right
+                pos[1]++;
+                steps++;
+                visited.Add(pos);
+
+            }
+
+            // If on the same row
+            if (pos[0] == end[0]) {
+
+                // While not on the same column
+                while (pos[1] != end[1]) {
+
+                    // Go right
+                    pos[1]++;
+                    steps++;
+                    visited.Add(pos);
+
+                }
+
+              // If on the same column
+            } else if (pos[1] == end[1]) {
+
+                // While not on the same row
+                while (pos[0] != end[0]) {
+
+                    // Go up
+                    pos[0]--;
+                    steps++;
+                    visited.Add(pos);
+
+                }
+
+            }
+
+            if (pos[0] == end[0] && pos[1] == end[1]) {
+
+                if (steps != visited.Count) {
+
+                    AdventOfCode.PrintWithColor("Steps is not equal to visited.Count!", ConsoleColor.Red);
+
+                }
+
+                return (steps, visited);
+
+            } else {
+
+                // If no path found
+                AdventOfCode.PrintWithColor("We are still not at the end!", ConsoleColor.Red);
+                return (-1, []);
+                
+            }
+
+        }
+
         protected override string Part2() {
 
-            return string.Empty;
+            List<string> map = AdventOfCode.GetInput("example.txt").ToList();
+
+            foreach (string line in map) Console.WriteLine(line);
+
+            Console.WriteLine();
+
+            PrintMap(map);
+
+            Console.WriteLine();
+
+            List<string> expandedMap = ExpandMapPart2(map);
+
+            PrintMap(expandedMap);
+
+            List<int[]> galaxies = GetGalaxies(expandedMap);
+
+            int g1 = 4;
+            int g2 = 1;
+            int steps1 = ShortestPath(expandedMap, galaxies[g1], galaxies[g2]);
+            (int, List<int[]>) path = ShortestPathPart2(expandedMap, galaxies[g1], galaxies[g2]);
+
+            int steps = path.Item1;
+            List<int[]> visited = path.Item2;
+
+            Console.WriteLine();
+
+            Console.WriteLine(visited[0][1]);
+
+            PrintMap(expandedMap, visited);
+
+            int totalSteps = 0;
+
+            /*for (int i = 0; i < galaxies.Count; i++)
+                for (int j = i + 1; j < galaxies.Count; j++)
+                    totalSteps += ShortestPathPart2(expandedMap, galaxies[i], galaxies[j]).Item1;*/
+
+
+            AdventOfCode.PrintWithColor("\nShortest path between galaxies 1: " + steps1);
+            AdventOfCode.PrintWithColor("Shortest path between galaxies 2: " + steps + "\n");
+
+            return totalSteps.ToString();
 
         }
 
