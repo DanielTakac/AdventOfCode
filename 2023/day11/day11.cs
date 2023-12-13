@@ -11,8 +11,6 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            return string.Empty;
-
             List<string> map = AdventOfCode.GetInput().ToList();
 
             List<string> expandedMap = ExpandMap(map);
@@ -328,12 +326,12 @@ namespace AdventOfCode {
                 // go up
                 pos[0]--;
                 steps++;
-                visited.Add(pos);
+                visited.Add([pos[0], pos[1]]);
 
                 // go right
                 pos[1]++;
                 steps++;
-                visited.Add(pos);
+                visited.Add([pos[0], pos[1]]);
 
             }
 
@@ -343,10 +341,16 @@ namespace AdventOfCode {
                 // While not on the same column
                 while (pos[1] != end[1]) {
 
+                    if (map[pos[0]][pos[1]] == '$') {
+
+                        steps += 100000000;
+
+                    }
+
                     // Go right
                     pos[1]++;
                     steps++;
-                    visited.Add(pos);
+                    visited.Add([pos[0], pos[1]]);
 
                 }
 
@@ -359,7 +363,7 @@ namespace AdventOfCode {
                     // Go up
                     pos[0]--;
                     steps++;
-                    visited.Add(pos);
+                    visited.Add([pos[0], pos[1]]);
 
                 }
 
@@ -410,6 +414,8 @@ namespace AdventOfCode {
 
             int steps = path.Item1;
             List<int[]> visited = path.Item2;
+
+            foreach (int[] vis in visited) Console.WriteLine("[" + vis[0] + " " + vis[1] + "]");
 
             Console.WriteLine();
 
