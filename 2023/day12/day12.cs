@@ -11,30 +11,37 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            string[] input = AdventOfCode.GetInput("example.txt");
+            string[] input = AdventOfCode.GetInput();
 
-            List<string> possibilities = GetPossibleArrangements(input[0]);
+            int totalPossibilities = 0;
 
-            foreach (string arrangement in possibilities) {
+            foreach (string line in input) {
 
-                PrintArrangement(arrangement);
+                totalPossibilities += GetPossibleArrangements(line).Count;
 
             }
 
-            string testStr = "#.#.###";
-            bool valid = IsValid(testStr, [1, 2, 3]);
-            Console.Write(testStr + ": ");
-            if (valid) {
-                AdventOfCode.PrintWithColor(valid, ConsoleColor.Green);
-            } else {
-                AdventOfCode.PrintWithColor(valid, ConsoleColor.Red);
-            }
-
-            return string.Empty;
+            return totalPossibilities.ToString();
 
         }
 
-        private void PrintArrangement(string str) {
+        private static string UnfoldRecord(string record) {
+
+            string unfoldedStr = string.Empty;
+            string unfoldedSizes = string.Empty;
+
+            for (int i = 0; i < 5; i++) {
+
+                unfoldedStr += record.Split()[0];
+                unfoldedSizes += record.Split()[1];
+
+            }
+
+            return unfoldedStr + " " + unfoldedSizes;
+
+        }
+
+        private static void PrintArrangement(string str) {
 
             foreach (char ch in str) {
 
@@ -46,62 +53,100 @@ namespace AdventOfCode {
                     Console.Write(ch);
                 }
 
-                Console.WriteLine();
-
             }
+
+            Console.WriteLine();
 
         }
 
-        private List<string> GetPossibleArrangements(string input) {
+        private static List<string> GetPossibleArrangements(string input) {
 
             string str = input.Split()[0];
             int[] sizes = input.Split()[1].Split(',').Select(int.Parse).ToArray();
 
-            List<string> arr = [];
+            bool[] lockedPositions = new bool[str.Length];
 
-            Console.WriteLine("'" + str + "'");
+            for (int i = 0; i < str.Length; i++) {
 
-            
+                if (str[i] != '?') {
 
-            return arr;
+                    lockedPositions[i] = true;
 
-        }
+                } else {
 
-        private bool IsValid(string str, int[] sizes) {
-
-            Regex regex = new Regex("#+");
-
-            MatchCollection matches = regex.Matches(str);
-
-            for (int i = 0; i < matches.Count; i++) {
-
-                AdventOfCode.PrintWithColor(matches[i].Value);
-
-            }
-
-            bool valid = matches.Count == sizes.Length;
-
-            AdventOfCode.PrintWithColor("1. check: " + valid, ConsoleColor.Cyan);
-
-            for (int i = 0; i < matches.Count; i++) {
-
-                if (matches[i].Length != sizes[i]) {
-
-                    valid = false;
+                    lockedPositions[i] = false;
 
                 }
 
             }
 
-            AdventOfCode.PrintWithColor("2. check: " + valid, ConsoleColor.Cyan);
+            List<string> possibleStrs = [];
 
-            return valid;
+            GenerateVariations(str.ToCharArray(), lockedPositions, 0, str.Length, sizes, ref possibleStrs);
+
+            return possibleStrs;
+
+        }
+
+        static void GenerateVariations(char[] variation, bool[] lockedPositions, int index, int length, int[] sizes, ref List<string> possibleStrs) {
+            if (index == length) {
+                if (IsValid(string.Join("", variation), sizes)) {
+                    possibleStrs.Add(string.Join("", variation));
+                }
+                return;
+            }
+
+            if (lockedPositions[index]) {
+
+                GenerateVariations(variation, lockedPositions, index + 1, length, sizes, ref possibleStrs);
+
+            } else {
+
+                variation[index] = '.';
+                GenerateVariations(variation, lockedPositions, index + 1, length, sizes, ref possibleStrs);
+
+                variation[index] = '#';
+                GenerateVariations(variation, lockedPositions, index + 1, length, sizes, ref possibleStrs);
+
+            }
+
+        }
+
+        private static bool IsValid(string str, int[] sizes) {
+
+            Regex regex = new Regex("#+");
+
+            MatchCollection matches = regex.Matches(str);
+
+            if (matches.Count != sizes.Length) return false;
+
+            for (int i = 0; i < matches.Count; i++) {
+
+                if (matches[i].Length != sizes[i]) {
+
+                    return false;
+
+                }
+
+            }
+
+            return true;
 
         }
 
         protected override string Part2() {
 
-            return string.Empty;
+            string[] input = AdventOfCode.GetInput();
+
+            int totalPossibilities = 0;
+
+            foreach (string line in input) {
+
+                totalPossibilities += GetPossibleArrangements(UnfoldRecord(line)).Count;
+
+            }
+
+            return totalPossibilities.ToString();
 
         }
 
@@ -109,7 +154,7 @@ namespace AdventOfCode {
 
             var day = new Day12();
 
-            day.Solve();
+            day.Solve(true);
 
             Console.ReadKey(true);
 
