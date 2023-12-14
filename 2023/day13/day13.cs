@@ -14,18 +14,18 @@ namespace AdventOfCode {
 
             List<string[]> patterns = [];
 
-            List<string> lines = []; 
+            List<string> lines = [];
 
-            foreach (string line in input) {
+            for (int i = 0; i < input.Length; i++) {
 
-                if (line.Length == 0) {
+                if (input[i].Length == 0 || i == input.Length - 1) {
 
                     patterns.Add(lines.ToArray());
                     lines = [];
 
                 } else {
 
-                    lines.Add(line);
+                    lines.Add(input[i]);
 
                 }
 
@@ -34,10 +34,51 @@ namespace AdventOfCode {
             foreach (string[] pattern in patterns) {
 
                 int[] rows = GetReflectedRows(pattern);
+                int[] cols = GetReflectedCols(pattern);
 
-                Console.Write("Reflected rows: ");
-                foreach (int row in rows) AdventOfCode.PrintWithColor(row + " ", ConsoleColor.Cyan, false);
+                for (int col = 0; col < pattern[0].Length; col++) {
+
+                    if (cols.Contains(col - 1)) {
+
+                        AdventOfCode.PrintWithColor("<", ConsoleColor.Cyan, false);
+
+                    } else if (cols.Contains(col)) {
+
+                        AdventOfCode.PrintWithColor(">", ConsoleColor.Cyan, false);
+
+                    } else {
+
+                        Console.Write(" ");
+
+                    }
+
+                }
+
                 Console.WriteLine();
+
+                for (int row = 0; row < pattern.Length; row++) {
+
+                    Console.Write(pattern[row]);
+
+                    if (rows.Contains(row - 1)) {
+
+                        AdventOfCode.PrintWithColor(" \\", ConsoleColor.Cyan);
+
+                    } else if (rows.Contains(row)) {
+
+                        AdventOfCode.PrintWithColor(" /", ConsoleColor.Cyan);
+
+                    } else {
+
+                        Console.WriteLine();
+
+                    }
+
+                }
+
+                Console.Write("\nReflected rows: ");
+                foreach (int row in rows) AdventOfCode.PrintWithColor(row + " ", ConsoleColor.Cyan, false);
+                Console.WriteLine("\n");
 
             }
 
@@ -71,6 +112,14 @@ namespace AdventOfCode {
             }
 
             return reflectedRows.ToArray();
+
+        }
+
+        private static int[] GetReflectedCols(string[] pattern) {
+
+            List<int> reflectedCols = [];
+
+            return reflectedCols.ToArray();
 
         }
 
