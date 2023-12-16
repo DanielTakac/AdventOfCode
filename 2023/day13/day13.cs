@@ -10,7 +10,7 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            string[] input = AdventOfCode.GetInput("example.txt");
+            string[] input = AdventOfCode.GetInput();
 
             List<string[]> patterns = [];
 
@@ -31,10 +31,27 @@ namespace AdventOfCode {
 
             }
 
+            int finalCols = 0;
+            int finalRows = 0;
+
             foreach (string[] pattern in patterns) {
 
                 int[] rows = GetReflectedRows(pattern);
                 int[] cols = GetReflectedCols(pattern);
+
+                foreach (int row in rows) {
+
+                    finalRows += 100 * (row + 1);
+
+                }
+
+                foreach (int col in cols) {
+
+                    finalCols += col + 1;
+
+                }
+
+                // Debugging
 
                 for (int col = 0; col < pattern[0].Length; col++) {
 
@@ -78,11 +95,15 @@ namespace AdventOfCode {
 
                 Console.Write("\nReflected rows: ");
                 foreach (int row in rows) AdventOfCode.PrintWithColor(row + " ", ConsoleColor.Cyan, false);
+                Console.Write("\nReflected columns: ");
+                foreach (int col in cols) AdventOfCode.PrintWithColor(col + " ", ConsoleColor.Cyan, false);
                 Console.WriteLine("\n");
 
             }
 
-            return string.Empty;
+            int finalAnsa = finalRows + finalCols;
+
+            return finalAnsa.ToString();
 
         }
 
@@ -103,9 +124,40 @@ namespace AdventOfCode {
                     }
 
                 }
+
                 if (mirrored) {
 
-                    reflectedRows.Add(i);
+                    bool actuallyMirrored = true;
+
+                    int rowVec = 1;
+
+                    while (actuallyMirrored) {
+
+                        int row1 = i + rowVec + 1;
+                        int row2 = i - rowVec;
+
+                        if (row1 >= pattern.Length || row2 < 0) break;
+
+                        for (int j = 0; j < pattern[0].Length; j++) {
+
+                            if (pattern[row1][j] != pattern[row2][j]) {
+
+                                actuallyMirrored = false;
+                                break;
+
+                            }
+
+                        }
+
+                        rowVec++;
+
+                    }
+
+                    if (actuallyMirrored) {
+
+                        reflectedRows.Add(i);
+
+                    }
 
                 }
 
@@ -118,6 +170,57 @@ namespace AdventOfCode {
         private static int[] GetReflectedCols(string[] pattern) {
 
             List<int> reflectedCols = [];
+
+            for (int j = 0; j < pattern[0].Length - 1; j++) {
+
+                bool mirrored = true;
+
+                for (int i = 0; i < pattern.Length; i++) {
+
+                    if (pattern[i][j] != pattern[i][j + 1]) {
+
+                        mirrored = false;
+
+                    }
+
+                }
+
+                if (mirrored) {
+
+                    bool actuallyMirrored = true;
+
+                    int colVec = 1;
+
+                    while (actuallyMirrored) {
+
+                        int col1 = j + colVec + 1;
+                        int col2 = j - colVec;
+
+                        if (col1 >= pattern[0].Length || col2 < 0) break;
+
+                        for (int i = 0; i < pattern.Length; i++) {
+                            if (pattern[i][col1] != pattern[i][col2]) {
+
+                                actuallyMirrored = false;
+                                break;
+
+                            }
+
+                        }
+
+                        colVec++;
+
+                    }
+
+                    if (actuallyMirrored) {
+
+                        reflectedCols.Add(j);
+
+                    }
+
+                }
+
+            }
 
             return reflectedCols.ToArray();
 
