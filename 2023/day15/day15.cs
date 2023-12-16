@@ -10,13 +10,24 @@ namespace AdventOfCode {
 
         protected override string Part1() {
 
-            string input = AdventOfCode.GetInput("example.txt")[0];
+            // --- One liner ---
+            return AdventOfCode.GetInput()[0].Split(',').Select(x => x.Aggregate(0, (y,z) => (y+z)*17%256)).Sum().ToString();
 
-            Console.WriteLine(input + "\n");
+        }
 
+        private static int HASH(string input) {
 
+            int currentValue = 0;
 
-            return string.Empty;
+            foreach (int ch in input) {
+
+                currentValue += ch;
+                currentValue *= 17;
+                currentValue %= 256;
+
+            }
+
+            return currentValue;
 
         }
 
