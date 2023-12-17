@@ -181,9 +181,58 @@ namespace AdventOfCode {
 
         }
 
+        public class BeamConfig {
+
+            public int X { get; }
+            public int Y { get; }
+            public Direction Direction { get; }
+            public int EnergizedTiles { get; set; }
+
+            public BeamConfig(int x, int y, Direction direction) {
+
+                X = x;
+                Y = y;
+                Direction = direction;
+
+            }
+
+        }
+
         protected override string Part2() {
 
-            return string.Empty;
+            string[] input = AdventOfCode.GetInput();
+
+            List<BeamConfig> configs = [];
+
+            for (int i = 0; i < input.Length; i++) {
+
+                configs.Add(new BeamConfig(i, 0, Direction.Right));
+                configs.Add(new BeamConfig(i, input[0].Length - 1, Direction.Left));
+
+            }
+
+            for (int i = 0; i < input[0].Length; i++) {
+
+                configs.Add(new BeamConfig(0, i, Direction.Down));
+                configs.Add(new BeamConfig(input.Length - 1, i, Direction.Up));
+
+            }
+
+            for (int i = 0; i < configs.Count; i++) {
+
+                bool[,] tiles = new bool[input.Length, input[0].Length];
+
+                tiles[configs[i].X, configs[i].Y] = true; // Set starting tile to true
+
+                FollowLightBeam(input, tiles, configs[i].X, configs[i].Y, configs[i].Direction, new List<Beam>());
+
+                configs[i].EnergizedTiles = CountOfEnergizedTiles(tiles);
+
+            }
+
+            int mostEnergizedTiles = configs.Max(x => x.EnergizedTiles);
+
+            return mostEnergizedTiles.ToString();
 
         }
 
