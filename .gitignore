@@ -219,3 +219,5 @@ csx/
 
 # Advent of Code input files
 *.txt
+
+__pycache__/
