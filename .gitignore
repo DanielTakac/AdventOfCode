@@ -221,3 +221,5 @@ csx/
 *.txt
 
 __pycache__/
+
+.vscode
