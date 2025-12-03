@@ -1,6 +1,6 @@
 import adventofcode as aoc
 
-input = aoc.read_input(day=2, InputType=aoc.Input.Example)
+input = aoc.read_input(day=2, InputType=aoc.Input.Real)
 
 def part1(input):
     invalid_id_sum = 0
@@ -48,7 +48,22 @@ def part2(input):
     aoc.answer("Sum of invalid IDs:", invalid_id_sum)
 
 def check_id_validity2(id):
-    pass
+    # aoc.cyan("Checking ID:", id)
+    if len(id) == 1:
+        return True
+    for i in range(1, len(id)):
+        substr = id[0:i]
+        all_equal = True
+        for j in range(i + 1, len(id) + 1, i):
+            subtr2 = id[j-1:j+i-1]
+            # aoc.info("i:", i, "j:", j, "substr:", substr, "subtr2:", subtr2)
+            if substr != subtr2:
+                all_equal = False
+                break
+        if all_equal:
+            aoc.magenta("ID is invalid:", id)
+            return False
+    return True
 
 # part1(input)
 part2(input)
