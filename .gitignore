@@ -217,9 +217,6 @@ PublishScripts/
 csx/
 *.build.csdef
 
-# Advent of Code input files
-*.txt
-
 __pycache__/
 
 .vscode
