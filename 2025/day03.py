@@ -1,13 +1,7 @@
 import adventofcode as aoc
+import colorama
 
 input = aoc.read_input(day=3, InputType=aoc.Input.Real)
-
-# each bank has some amount of batteries
-# eac battery has a value from 1 to 9
-# within each bank, exactly two batteries have to be turned on
-# the joltage of the bank is equal to the number formed by the digits of the two turned on batteries
-# for example a bank [12345] with batteries 2 and 4 turned on has a joltage of 24 jolts
-# we need to find the largest possible joltage of each bank
 
 def part1(input):
     total_joltage = 0
@@ -37,4 +31,44 @@ def get_indexes_of_max_value_batteries(bank):
                 indexes.append(battery_index)
     return indexes
 
+def part2(input):
+    # same as part 1 but now we need 12 batteries per bank instead of 2
+    total_joltage = 0
+    for bank in input:
+        battery_indexes = []
+        b = bank
+        for i in range(12):
+            # we need to leave room for the remaining batteries
+            unfound_batteries = 12 - (i + 1)
+            if unfound_batteries > 0:
+                b = b[:-unfound_batteries]
+            index = get_first_index_of_max_value_batteries(b)
+            # offset index to map to original bank instead of b
+            if i > 0:
+                index += battery_indexes[-1] + 1
+            battery_indexes.append(index)
+            b = bank[battery_indexes[-1]+1:]
+        joltage = int(''.join([bank[i] for i in battery_indexes]))
+        total_joltage += joltage
+        print_bank(bank, battery_indexes)
+        aoc.cyan(f"joltage: {joltage}")
+    aoc.answer(total_joltage)
+
+def get_first_index_of_max_value_batteries(bank):
+    for search_value in range(9, 0, -1):
+        for battery_index in range(len(bank)):
+            if int(bank[battery_index]) == search_value:
+                return battery_index
+
+# debug
+def print_bank(bank, battery_indexes):
+    output = ""
+    for i in range(len(bank)):
+        if i in battery_indexes:
+            output += f"{colorama.Fore.GREEN}{bank[i]}{colorama.Style.RESET_ALL}"
+        else:
+            output += f"{colorama.Fore.BLUE}{bank[i]}{colorama.Style.RESET_ALL}"
+    aoc.cyan(output)
+
 part1(input)
+part2(input)
