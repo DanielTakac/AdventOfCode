@@ -29,6 +29,18 @@ def error(*args):
 def answer(*args):
     print(f"{colorama.Fore.GREEN}ANSWER:", *args, end=colorama.Style.RESET_ALL + "\n")
 
+def blue(*args):
+    print(f"{colorama.Fore.BLUE}", *args, end=colorama.Style.RESET_ALL + "\n")
+
+def yellow(*args):
+    print(f"{colorama.Fore.YELLOW}", *args, end=colorama.Style.RESET_ALL + "\n")
+
+def red(*args):
+    print(f"{colorama.Fore.RED}", *args, end=colorama.Style.RESET_ALL + "\n")
+
+def green(*args):
+    print(f"{colorama.Fore.GREEN}", *args, end=colorama.Style.RESET_ALL + "\n")
+
 def cyan(*args):
     print(f"{colorama.Fore.CYAN}", *args, end=colorama.Style.RESET_ALL + "\n")
 
