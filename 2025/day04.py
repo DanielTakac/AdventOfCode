@@ -78,31 +78,32 @@ def part2(input, print_delay=0, clear_screen=False):
                         removed_cells.append((x, y))
                         accessible_count += 1
                         previous_run += 1
-        # clear the terminal before printing
-        if clear_screen:
-            os.system('cls' if os.name == 'nt' else 'clear')
-        print_grid(grid, removed_cells, delay=print_delay)
+        print_grid(grid, removed_cells, delay=print_delay, clear_screen=clear_screen)
         for cell in removed_cells:
             xx, yy = cell
             grid[yy] = grid[yy][:xx] + '.' + grid[yy][xx+1:]
     aoc.answer("Part2: Accessible cells:", accessible_count)
 
-def print_grid(grid, removed_cells=[], delay=0):
+def print_grid(grid, removed_cells=[], delay=0, clear_screen=False):
+    output = ""
     for x in range(len(grid[0])):
-        print("-", end='')
-    print()
+        output += "-"
+    output += "\n"
     for y in range(len(grid)):
         for x in range(len(grid[0])):
             cell = grid[y][x]
             if (x, y) in removed_cells:
-                print(f"{colorama.Fore.GREEN}{cell}{colorama.Style.RESET_ALL}", end='')
+                output += f"{colorama.Fore.GREEN}{cell}{colorama.Style.RESET_ALL}"
             elif cell == '@':
-                print(f"{colorama.Fore.CYAN}{cell}{colorama.Style.RESET_ALL}", end='')
+                output += f"{colorama.Fore.CYAN}{cell}{colorama.Style.RESET_ALL}"
             else:
-                print(f"{colorama.Fore.BLUE}{cell}{colorama.Style.RESET_ALL}", end='')
-        print()
+                output += f"{colorama.Fore.BLUE}{cell}{colorama.Style.RESET_ALL}"
+        output += "\n"
+    if clear_screen:
+        os.system('cls' if os.name == 'nt' else 'clear')
+    print(output)
     if delay > 0:
         time.sleep(delay)
 
 part1(input)
-part2(input, print_delay=0.1, clear_screen=False)
+part2(input, print_delay=0.2, clear_screen=True)
